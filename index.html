@@ -14,7 +14,9 @@
         }
         
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: #333;
             line-height: 1.6;
             min-height: 100vh;
@@ -24,27 +26,51 @@
             align-items: center;
         }
         
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
         .container {
             max-width: 1000px;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            position: relative;
+        }
+        
+        .container:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71, #1a2a6c);
         }
         
         header {
-            background: linear-gradient(90deg, #4b6cb7, #182848);
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
             color: white;
-            padding: 30px;
+            padding: 30px 20px;
             text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
         }
         
         header h1 {
             font-size: 2.8rem;
             margin-bottom: 10px;
             letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         header p {
@@ -52,6 +78,7 @@
             opacity: 0.9;
             max-width: 700px;
             margin: 0 auto;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         
         .logo {
@@ -60,7 +87,7 @@
             left: 30px;
             font-size: 2rem;
             background: white;
-            color: #4b6cb7;
+            color: #1a2a6c;
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -68,6 +95,14 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 3;
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
         
         .content {
@@ -86,6 +121,11 @@
             display: block;
         }
         
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .intro-screen {
             text-align: center;
             padding: 40px 20px;
@@ -93,8 +133,10 @@
         
         .intro-screen h2 {
             font-size: 2.5rem;
-            color: #4b6cb7;
             margin-bottom: 20px;
+            background: linear-gradient(45deg, #1a2a6c, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .intro-screen p {
@@ -119,31 +161,36 @@
             background: #f8f9ff;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            box-shadow: 0 8px 20px rgba(26, 42, 108, 0.1);
+            transition: all 0.4s ease;
+            border: 2px solid #e6eeff;
         }
         
         .feature:hover {
             transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(26, 42, 108, 0.2);
+            border-color: #a2c0ff;
         }
         
         .feature i {
             font-size: 2.5rem;
-            color: #4b6cb7;
+            background: linear-gradient(45deg, #1a2a6c, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 15px;
         }
         
         .feature h3 {
             font-size: 1.3rem;
             margin-bottom: 10px;
-            color: #182848;
+            color: #1a2a6c;
         }
         
         .btn {
             display: inline-block;
-            background: linear-gradient(90deg, #4b6cb7, #182848);
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
             color: white;
-            padding: 15px 40px;
+            padding: 16px 45px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
@@ -151,12 +198,29 @@
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(75, 108, 183, 0.4);
+            box-shadow: 0 5px 15px rgba(26, 42, 108, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover:before {
+            left: 100%;
         }
         
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(75, 108, 183, 0.6);
+            box-shadow: 0 8px 20px rgba(26, 42, 108, 0.6);
         }
         
         .btn:active {
@@ -165,9 +229,14 @@
         
         .btn-outline {
             background: transparent;
-            border: 2px solid #4b6cb7;
-            color: #4b6cb7;
+            border: 2px solid #3a7bd5;
+            color: #3a7bd5;
             box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
+            color: white;
         }
         
         .test-screen .question-container {
@@ -175,14 +244,16 @@
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 25px rgba(26, 42, 108, 0.08);
+            border: 2px solid #e6eeff;
         }
         
         .question-text {
             font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 25px;
-            color: #182848;
+            color: #1a2a6c;
+            line-height: 1.5;
         }
         
         .options {
@@ -203,14 +274,15 @@
         }
         
         .option:hover {
-            border-color: #4b6cb7;
+            border-color: #3a7bd5;
             background: #f0f4ff;
+            transform: translateY(-2px);
         }
         
         .option.selected {
-            border-color: #4b6cb7;
+            border-color: #3a7bd5;
             background: #e0e9ff;
-            box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.2);
+            box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.2);
         }
         
         .option .indicator {
@@ -222,11 +294,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
         
         .option.selected .indicator {
-            border-color: #4b6cb7;
-            background: #4b6cb7;
+            border-color: #3a7bd5;
+            background: #3a7bd5;
         }
         
         .option.selected .indicator:after {
@@ -255,14 +328,40 @@
             background: #e0e5ff;
             border-radius: 6px;
             overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
         }
         
         .progress {
             height: 100%;
-            background: linear-gradient(90deg, #4b6cb7, #182848);
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
             border-radius: 6px;
             width: 0%;
             transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0.2) 25%, 
+                transparent 25%, 
+                transparent 50%, 
+                rgba(255,255,255,0.2) 50%, 
+                rgba(255,255,255,0.2) 75%, 
+                transparent 75%, 
+                transparent);
+            background-size: 30px 30px;
+            animation: animateProgress 1s linear infinite;
+        }
+        
+        @keyframes animateProgress {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 0; }
         }
         
         .navigation {
@@ -281,13 +380,13 @@
         
         .result-title {
             font-size: 2.2rem;
-            color: #182848;
+            color: #1a2a6c;
             margin-bottom: 15px;
         }
         
         .result-type {
             display: inline-block;
-            background: linear-gradient(90deg, #4b6cb7, #182848);
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
             color: white;
             padding: 8px 25px;
             border-radius: 30px;
@@ -295,6 +394,7 @@
             font-weight: bold;
             margin-bottom: 20px;
             letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(26, 42, 108, 0.3);
         }
         
         .result-description {
@@ -307,7 +407,8 @@
             background: #f8f9ff;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 25px rgba(26, 42, 108, 0.08);
+            border: 2px solid #e6eeff;
         }
         
         .traits {
@@ -323,28 +424,60 @@
             padding: 10px 20px;
             border-radius: 30px;
             font-weight: 600;
-            color: #4b6cb7;
+            color: #1a2a6c;
+            box-shadow: 0 3px 10px rgba(26, 42, 108, 0.1);
         }
         
         .payment-section {
-            background: #f8f9ff;
+            background: linear-gradient(135deg, #f8f9ff, #e6eeff);
             border-radius: 15px;
             padding: 30px;
             margin: 30px auto;
             max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(26, 42, 108, 0.15);
+            border: 2px solid #d4e0ff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-section:before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 50px;
+            height: 50px;
+            background: #1a2a6c;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .payment-section:after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 80px;
+            height: 80px;
+            background: #3a7bd5;
+            border-radius: 50%;
+            opacity: 0.1;
         }
         
         .payment-title {
             font-size: 1.5rem;
-            color: #182848;
+            color: #1a2a6c;
             margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
         }
         
         .payment-info {
             color: #555;
             margin-bottom: 25px;
             line-height: 1.7;
+            position: relative;
+            z-index: 2;
         }
         
         .qrcode-container {
@@ -352,8 +485,11 @@
             border-radius: 15px;
             padding: 20px;
             display: inline-block;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(26, 42, 108, 0.2);
             margin: 20px 0;
+            position: relative;
+            z-index: 2;
+            border: 1px solid #e0e5ff;
         }
         
         .qrcode {
@@ -366,31 +502,29 @@
             justify-content: center;
             margin: 0 auto;
             position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
         }
         
-        .qrcode:before {
-            content: "";
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 5px solid #182848;
+        .qrcode img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .qrcode:after {
             content: "支付二维码";
             position: absolute;
             bottom: -40px;
+            left: 0;
+            right: 0;
             font-weight: 600;
-            color: #4b6cb7;
-        }
-        
-        .qrcode i {
-            font-size: 4rem;
-            color: #4b6cb7;
+            color: #1a2a6c;
         }
         
         .restart-btn {
             margin-top: 20px;
+            position: relative;
+            z-index: 2;
         }
         
         footer {
@@ -399,11 +533,7 @@
             color: #777;
             font-size: 0.9rem;
             border-top: 1px solid #eee;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            background: #f8f9ff;
         }
         
         @media (max-width: 768px) {
@@ -423,17 +553,27 @@
             .feature {
                 min-width: 100%;
             }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .result-type {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">
+            <div class="logo floating">
                 <i class="fas fa-brain"></i>
             </div>
-            <h1>MBTI性格测试</h1>
-            <p>通过科学测试，发现真实的自己，了解性格优势与职业发展方向</p>
+            <div class="header-content">
+                <h1>MBTI性格测试</h1>
+                <p>通过科学测试，发现真实的自己，了解性格优势与职业发展方向</p>
+            </div>
         </header>
         
         <div class="content">
@@ -518,11 +658,12 @@
                     
                     <div class="qrcode-container">
                         <div class="qrcode">
-                            <i class=“https://postimg.cc/vgfhnFKZ”
+                            <!-- 这里已使用您提供的支付二维码 -->
+                            <img src="https://i.postimg.cc/QtXqSw25/temp-Imageg-K7qyn.avif" alt="支付二维码">
                         </div>
                     </div>
                     
-                    <p>https://i.postimg.cc/QtXqSw25/temp-Imageg-K7qyn.avif</p>
+                    <p>请使用微信或支付宝扫描二维码完成支付</p>
                 </div>
                 
                 <button class="btn restart-btn" id="restartBtn">
@@ -532,7 +673,7 @@
         </div>
         
         <footer>
-            <p>© 2023 性格测试中心 |本测试只作为了解自己的一种方式，不能替代专业心理评估</p>
+            <p>© 2023 性格测试中心 | 本测试仅用于娱乐和自我了解，不能替代专业心理评估</p>
         </footer>
     </div>
 
@@ -768,6 +909,9 @@
             
             testScreen.classList.remove('active');
             resultScreen.classList.add('active');
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
         }
 
         // 重新测试
@@ -780,6 +924,9 @@
             resultScreen.classList.remove('active');
             testScreen.classList.add('active');
             showQuestion(currentQuestionIndex);
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
         });
     </script>
 </body>
