@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI性格测试 - 发现真实的自己</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .container:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71, #1a2a6c);
+        }
+        
+        header {
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 2rem;
+            background: white;
+            color: #1a2a6c;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 3;
+        }
+        
+        .content {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+        }
+        
+        .screen {
+            display: none;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .intro-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .intro-screen h2 {
+            font-size: 2.5rem;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #1a2a6c, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .intro-screen p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(26, 42, 108, 0.1);
+            transition: all 0.4s ease;
+            border: 2px solid #e6eeff;
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(26, 42, 108, 0.2);
+            border-color: #a2c0ff;
+        }
+        
+        .feature i {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #1a2a6c, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #1a2a6c;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
+            color: white;
+            padding: 16px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(26, 42, 108, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover:before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(26, 42, 108, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #3a7bd5;
+            color: #3a7bd5;
+            box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
+            color: white;
+        }
+        
+        .test-screen .question-container {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(26, 42, 108, 0.08);
+            border: 2px solid #e6eeff;
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #1a2a6c;
+            line-height: 1.5;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #e0e5ff;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            border-color: #3a7bd5;
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+        
+        .option.selected {
+            border-color: #3a7bd5;
+            background: #e0e9ff;
+            box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.2);
+        }
+        
+        .option .indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .option.selected .indicator {
+            border-color: #3a7bd5;
+            background: #3a7bd5;
+        }
+        
+        .option.selected .indicator:after {
+            content: "";
+            display: block;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .progress-container {
+            margin: 20px 0 30px;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #e0e5ff;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
+            border-radius: 6px;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0.2) 25%, 
+                transparent 25%, 
+                transparent 50%, 
+                rgba(255,255,255,0.2) 50%, 
+                rgba(255,255,255,0.2) 75%, 
+                transparent 75%, 
+                transparent);
+            background-size: 30px 30px;
+            animation: animateProgress 1s linear infinite;
+        }
+        
+        @keyframes animateProgress {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 0; }
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .result-screen {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .result-header {
+            margin-bottom: 30px;
+        }
+        
+        .result-title {
+            font-size: 2.2rem;
+            color: #1a2a6c;
+            margin-bottom: 15px;
+        }
+        
+        .result-type {
+            display: inline-block;
+            background: linear-gradient(90deg, #1a2a6c, #3a7bd5);
+            color: white;
+            padding: 8px 25px;
+            border-radius: 30px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(26, 42, 108, 0.3);
+        }
+        
+        .result-description {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            text-align: left;
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(26, 42, 108, 0.08);
+            border: 2px solid #e6eeff;
+        }
+        
+        .traits {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .trait {
+            background: #e0e9ff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a2a6c;
+            box-shadow: 0 3px 10px rgba(26, 42, 108, 0.1);
+        }
+        
+        .payment-section {
+            background: linear-gradient(135deg, #f8f9ff, #e6eeff);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(26, 42, 108, 0.15);
+            border: 2px solid #d4e0ff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-section:before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 50px;
+            height: 50px;
+            background: #1a2a6c;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .payment-section:after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 80px;
+            height: 80px;
+            background: #3a7bd5;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .payment-title {
+            font-size: 1.5rem;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .payment-info {
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .qrcode-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(26, 42, 108, 0.2);
+            margin: 20px 0;
+            position: relative;
+            z-index: 2;
+            border: 1px solid #e0e5ff;
+        }
+        
+        .qrcode {
+            width: 200px;
+            height: 200px;
+            background: #f0f4ff;
+            border: 15px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        .qrcode img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .qrcode:after {
+            content: "支付二维码";
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            font-weight: 600;
+            color: #1a2a6c;
+        }
+        
+        .restart-btn {
+            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            background: #f8f9ff;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @media (max-width: 768px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .logo {
+                position: static;
+                margin: 0 auto 15px;
+            }
+            
+            .feature {
+                min-width: 100%;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .result-type {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo floating">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="header-content">
+                <h1>MBTI性格测试</h1>
+                <p>通过科学测试，发现真实的自己，了解性格优势与职业发展方向</p>
+            </div>
+        </header>
+        
+        <div class="content">
+            <!-- 介绍页面 -->
+            <div class="screen intro-screen active" id="introScreen">
+                <h2>探索你的性格类型</h2>
+                <p>MBTI（Myers-Briggs Type Indicator）是一种迫选型、自我报告式的人格测评工具，用以衡量和描述人们在获取信息、作出决策、对待生活等方面的心理活动规律和不同的人格类型表现。</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-user-friends"></i>
+                        <h3>性格分析</h3>
+                        <p>深入了解自己的性格特点、优势和潜在盲点</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-briefcase"></i>
+                        <h3>职业建议</h3>
+                        <p>获得与您性格匹配的职业发展方向建议</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>成长指南</h3>
+                        <p>了解如何利用性格优势实现个人成长</p>
+                    </div>
+                </div>
+                
+                <p>测试包含12道题目，大约需要5分钟完成。请根据您的第一感觉选择最符合的选项。</p>
+                <button class="btn" id="startBtn">开始测试</button>
+            </div>
+            
+            <!-- 测试页面 -->
+            <div class="screen test-screen" id="testScreen">
+                <div class="progress-container">
+                    <div class="progress-text">
+                        <span>问题 <span id="currentQuestion">1</span>/<span id="totalQuestions">12</span></span>
+                        <span><span id="progressPercent">0</span>% 已完成</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="questionText">您更喜欢如何度过闲暇时间？</div>
+                    <div class="options" id="optionsContainer">
+                        <!-- 选项将通过JS动态生成 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-outline" id="prevBtn" disabled>
+                        <i class="fas fa-arrow-left"></i> 上一题
+                    </button>
+                    <button class="btn" id="nextBtn">下一题 <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+            
+            <!-- 结果页面 -->
+            <div class="screen result-screen" id="resultScreen">
+                <div class="result-header">
+                    <h2 class="result-title">您的性格类型是</h2>
+                    <div class="result-type" id="resultType">ENFJ</div>
+                    <p>教育家型人格 (The Teacher)</p>
+                </div>
+                
+                <div class="result-description">
+                    <p><strong>ENFJ类型的人</strong>是天生的领导者，充满热情且富有魅力。您通常能很好地理解他人，并帮助他人发挥潜力。您喜欢帮助他人成长和发展，常常在教育、咨询和心理学领域表现出色。</p>
+                    <p>ENFJ是理想主义者和组织者，致力于实现他们认为对人类社会最好的事情。您善于沟通，喜欢与他人建立深厚而有意义的关系。</p>
+                </div>
+                
+                <div class="traits">
+                    <div class="trait">热情洋溢</div>
+                    <div class="trait">善于沟通</div>
+                    <div class="trait">有领导力</div>
+                    <div class="trait">有责任心</div>
+                    <div class="trait">理想主义</div>
+                </div>
+                
+                <div class="payment-section">
+                    <h3 class="payment-title">解锁完整报告</h3>
+                    <p class="payment-info">支付 ¥9.9 即可查看包含详细分析、职业建议、人际关系指南和成长路径的20页完整报告</p>
+                    
+                    <div class="qrcode-container">
+                        <div class="qrcode">
+                            <!-- 这里替换为您自己的二维码 -->
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://example.com/pay" alt="支付二维码">
+                        </div>
+                    </div>
+                    
+                    <p>请使用微信或支付宝扫描二维码完成支付</p>
+                </div>
+                
+                <button class="btn restart-btn" id="restartBtn">
+                    <i class="fas fa-redo"></i> 重新测试
+                </button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 性格测试中心 | 本测试仅用于娱乐和自我了解，不能替代专业心理评估</p>
+        </footer>
+    </div>
+
+    <script>
+        // 测试问题数据
+        const questions = [
+            {
+                text: "您更喜欢如何度过闲暇时间？",
+                options: [
+                    { text: "与朋友或家人在一起", type: "E" },
+                    { text: "独自阅读或思考", type: "I" }
+                ]
+            },
+            {
+                text: "当学习新事物时，您更倾向于：",
+                options: [
+                    { text: "关注具体事实和细节", type: "S" },
+                    { text: "关注整体概念和可能性", type: "N" }
+                ]
+            },
+            {
+                text: "在做决定时，您更注重：",
+                options: [
+                    { text: "逻辑和客观分析", type: "T" },
+                    { text: "个人价值观和他人感受", type: "F" }
+                ]
+            },
+            {
+                text: "您更喜欢的生活方式是：",
+                options: [
+                    { text: "有计划、有组织的", type: "J" },
+                    { text: "灵活、随性的", type: "P" }
+                ]
+            },
+            {
+                text: "在社交场合中，您通常：",
+                options: [
+                    { text: "主动与他人交流", type: "E" },
+                    { text: "等待他人主动交谈", type: "I" }
+                ]
+            },
+            {
+                text: "您更相信：",
+                options: [
+                    { text: "实际经验和具体证据", type: "S" },
+                    { text: "直觉和灵感", type: "N" }
+                ]
+            },
+            {
+                text: "当批评别人时，您更注重：",
+                options: [
+                    { text: "批评是否合理公正", type: "T" },
+                    { text: "批评是否委婉得体", type: "F" }
+                ]
+            },
+            {
+                text: "处理工作时，您倾向于：",
+                options: [
+                    { text: "提前计划并按计划执行", type: "J" },
+                    { text: "根据情况灵活调整", type: "P" }
+                ]
+            },
+            {
+                text: "您获得能量的主要方式是：",
+                options: [
+                    { text: "与他人互动", type: "E" },
+                    { text: "独处思考", type: "I" }
+                ]
+            },
+            {
+                text: "您更感兴趣的是：",
+                options: [
+                    { text: "现实和当下", type: "S" },
+                    { text: "可能性和未来", type: "N" }
+                ]
+            },
+            {
+                text: "当与别人意见不合时，您更可能：",
+                options: [
+                    { text: "坚持自己的观点", type: "T" },
+                    { text: "寻求共识和妥协", type: "F" }
+                ]
+            },
+            {
+                text: "您更喜欢的工作环境是：",
+                options: [
+                    { text: "结构清晰、目标明确", type: "J" },
+                    { text: "开放灵活、自主性强", type: "P" }
+                ]
+            }
+        ];
+
+        // 页面元素
+        const introScreen = document.getElementById('introScreen');
+        const testScreen = document.getElementById('testScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const startBtn = document.getElementById('startBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const currentQuestionEl = document.getElementById('currentQuestion');
+        const totalQuestionsEl = document.getElementById('totalQuestions');
+        const progress = document.getElementById('progress');
+        const progressPercent = document.getElementById('progressPercent');
+        const resultType = document.getElementById('resultType');
+
+        // 测试状态
+        let currentQuestionIndex = 0;
+        let answers = [];
+        let scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+        // 初始化
+        totalQuestionsEl.textContent = questions.length;
+
+        // 开始测试
+        startBtn.addEventListener('click', () => {
+            introScreen.classList.remove('active');
+            testScreen.classList.add('active');
+            showQuestion(currentQuestionIndex);
+        });
+
+        // 显示问题
+        function showQuestion(index) {
+            const question = questions[index];
+            questionText.textContent = question.text;
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, i) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option';
+                if (answers[index] === i) {
+                    optionEl.classList.add('selected');
+                }
+                
+                optionEl.innerHTML = `
+                    <div class="indicator"></div>
+                    <div class="option-text">${option.text}</div>
+                `;
+                
+                optionEl.addEventListener('click', () => {
+                    selectOption(i);
+                });
+                
+                optionsContainer.appendChild(optionEl);
+            });
+            
+            currentQuestionEl.textContent = index + 1;
+            updateProgress();
+            updateNavigation();
+        }
+
+        // 选择选项
+        function selectOption(optionIndex) {
+            answers[currentQuestionIndex] = optionIndex;
+            
+            // 清除之前的选择
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            // 标记当前选择
+            options[optionIndex].classList.add('selected');
+            
+            // 更新分数
+            const selectedType = questions[currentQuestionIndex].options[optionIndex].type;
+            scores[selectedType]++;
+            
+            // 自动前进到下一题（最后一题除外）
+            if (currentQuestionIndex < questions.length - 1) {
+                setTimeout(() => {
+                    nextQuestion();
+                }, 300);
+            } else {
+                updateNavigation();
+            }
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const percent = Math.round((currentQuestionIndex / questions.length) * 100);
+            progress.style.width = `${percent}%`;
+            progressPercent.textContent = percent;
+        }
+
+        // 更新导航按钮状态
+        function updateNavigation() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = answers[currentQuestionIndex] === undefined;
+            
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.innerHTML = '查看结果 <i class="fas fa-chart-bar"></i>';
+            } else {
+                nextBtn.innerHTML = '下一题 <i class="fas fa-arrow-right"></i>';
+            }
+        }
+
+        // 上一题
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+
+        // 下一题
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                nextQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        // 前进到下一题
+        function nextQuestion() {
+            if (answers[currentQuestionIndex] !== undefined) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            }
+        }
+
+        // 显示结果
+        function showResults() {
+            // 确定性格类型
+            const type = 
+                (scores.E > scores.I ? 'E' : 'I') +
+                (scores.S > scores.N ? 'S' : 'N') +
+                (scores.T > scores.F ? 'T' : 'F') +
+                (scores.J > scores.P ? 'J' : 'P');
+            
+            resultType.textContent = type;
+            
+            testScreen.classList.remove('active');
+            resultScreen.classList.add('active');
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        // 重新测试
+        restartBtn.addEventListener('click', () => {
+            // 重置状态
+            currentQuestionIndex = 0;
+            answers = [];
+            scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+            
+            resultScreen.classList.remove('active');
+            testScreen.classList.add('active');
+            showQuestion(currentQuestionIndex);
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        });
+    </script>
+</body>
+</html>
