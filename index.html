@@ -3,19 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>性格测试</title>
+  <title>性格测试 - 专业心理学分析</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <h1>性格测试</h1>
-    <p>欢迎参加我们的专业性格测试。请根据实际情况选择问题的答案。</p>
+    <p>欢迎参加我们基于国际性格学与色彩学的专业性格测试。请认真作答，最终结果将帮助您全面了解自己的性格特征。</p>
+    
+    <!-- 测试题目 -->
     <form id="quiz-form">
-      <!-- 动态生成测试题 -->
+      <div class="question">
+        <p>1. 你在社交场合中通常如何表现？</p>
+        <label><input type="radio" name="q1" value="introvert"> 更倾向于独处</label><br>
+        <label><input type="radio" name="q1" value="extrovert"> 更倾向于社交</label>
+      </div>
+      <div class="question">
+        <p>2. 当遇到挑战时，你通常会：</p>
+        <label><input type="radio" name="q2" value="thinking"> 通过逻辑分析解决</label><br>
+        <label><input type="radio" name="q2" value="feeling"> 依赖情感和直觉</label>
+      </div>
+      <!-- 继续添加更多问题，总共30道 -->
+      <button type="submit">提交并查看结果</button>
     </form>
-    <button type="submit" id="submit-btn">提交</button>
   </div>
 
+  <!-- 支付页面 -->
   <div id="payment-container" class="hidden">
     <h2>支付查看完整结果</h2>
     <p>请付款后查看完整的性格分析结果。</p>
@@ -23,9 +36,10 @@
     <button id="alipay-pay">支付宝支付</button>
   </div>
 
+  <!-- 结果页面 -->
   <div id="result-container" class="hidden">
     <h2>您的性格结果</h2>
-    <p id="result-text"></p>
+    <p id="result-text">您的测试结果将展示在此处。</p>
     <h3>测试准确度反馈</h3>
     <form id="feedback-form">
       <label for="accuracy">您认为此次测试的准确度：</label>
@@ -42,31 +56,55 @@
   <script src="script.js"></script>
 </body>
 </html>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+/* Reset some default browser styles */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body and general layout */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  padding: 20px;
 }
 
 .container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
   background-color: white;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.question {
+  margin-bottom: 20px;
 }
 
 button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
+  font-size: 18px;
   background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
-  margin-top: 20px;
 }
 
 button:hover {
@@ -77,32 +115,37 @@ button:hover {
   display: none;
 }
 
-#payment-container {
+#payment-container, #result-container {
   text-align: center;
 }
 
 #result-container {
-  text-align: center;
+  margin-top: 30px;
 }
 
-form {
+#feedback-form {
   margin-top: 20px;
 }
+
+select {
+  padding: 8px;
+  font-size: 14px;
+}
 const questions = [
-  { question: '你通常是一个内向的人吗?', options: ['是', '不是'] },
-  { question: '你更喜欢独自完成任务吗?', options: ['是', '不是'] },
-  // 这里可以添加更多问题，最多30题
+  { question: "你在社交场合中通常如何表现？", options: ['更倾向于独处', '更倾向于社交'] },
+  { question: "当遇到挑战时，你通常会：", options: ['通过逻辑分析解决', '依赖情感和直觉'] },
+  // 继续添加其他问题...
 ];
 
 const results = [
-  { type: 'ISTJ', description: '你是一个非常实际、谨慎的人……' },
-  { type: 'ENFP', description: '你是一个充满创意与激情的人……' },
-  // 根据不同的答案生成至少6种不同的性格结果
+  { type: 'ISTJ', description: '你是一个非常实际、谨慎的人，倾向于遵守规则，注重稳定和实际。你适合在职场中担任分析性、组织性的工作，例如项目经理、工程师等。' },
+  { type: 'ENFP', description: '你是一个充满创意与激情的人，热衷于探索新领域并激发他人。你适合从事创意和人际关系密集的工作，例如市场营销、广告创意等。' },
+  // 继续添加其他性格类型结果...
 ];
 
 let answers = [];
 
-// 动态加载测试问题
+// 动态加载问题
 function loadQuestions() {
   const form = document.getElementById('quiz-form');
   questions.forEach((q, index) => {
@@ -119,10 +162,11 @@ function loadQuestions() {
   });
 }
 
+// 处理表单提交
 document.getElementById('quiz-form').addEventListener('submit', function(e) {
   e.preventDefault();
-  
   answers = [];
+
   for (let i = 0; i < questions.length; i++) {
     const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
     if (selectedOption) {
@@ -143,7 +187,7 @@ function showPaymentScreen() {
   document.getElementById('payment-container').classList.remove('hidden');
 }
 
-// 支付操作
+// 支付处理
 document.getElementById('wechat-pay').addEventListener('click', function() {
   processPayment('wechat');
 });
@@ -156,7 +200,7 @@ function processPayment(paymentMethod) {
   showResults();
 }
 
-// 显示性格结果
+// 显示测试结果
 function showResults() {
   const result = getPersonalityResult();
   document.getElementById('payment-container').classList.add('hidden');
@@ -164,14 +208,16 @@ function showResults() {
   document.getElementById('result-text').textContent = result.description;
 }
 
-// 根据用户选择的答案计算性格结果
+// 根据答案计算性格类型
 function getPersonalityResult() {
-  const personalityType = 'ISTJ'; // 根据答案来得出结果类型
+  // 假设根据用户的答案计算出性格类型
+  const personalityType = 'ISTJ'; // 示例，实际应该根据答案得出
   return results.find(result => result.type === personalityType);
 }
 
 // 加载问题
 loadQuestions();
+
 
 
 
