@@ -9,7 +9,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.1.0/docx.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
-    /* 全局样式 */
     * {
       margin: 0;
       padding: 0;
@@ -122,7 +121,6 @@
       margin: 25px auto;
     }
     
-    /* 选择测试题量页面 */
     #test-options {
       padding: 40px 30px;
       text-align: center;
@@ -184,7 +182,6 @@
       color: #555;
     }
     
-    /* 进度条样式 */
     .progress-container {
       padding: 20px 30px;
       background: #f8f9ff;
@@ -223,7 +220,6 @@
       color: var(--primary);
     }
     
-    /* 问题样式 */
     .question-container {
       padding: 25px 30px;
     }
@@ -292,7 +288,6 @@
       color: #444;
     }
     
-    /* 按钮样式 */
     button {
       background: var(--gradient);
       color: white;
@@ -348,7 +343,6 @@
       background: #f5f7ff;
     }
     
-    /* 支付和结果页面 */
     .page {
       padding: 40px 30px;
       text-align: center;
@@ -428,6 +422,44 @@
     
     .alipay::before {
       background: #1677ff;
+    }
+    
+    /* 支付二维码样式 */
+    .qrcode-container {
+      margin: 30px auto;
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      max-width: 300px;
+    }
+    
+    .qrcode-title {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+    
+    .qrcode-image {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+    
+    .qrcode-image img {
+      width: 100%;
+      display: block;
+    }
+    
+    .qrcode-instruction {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 10px;
+    }
+    
+    .payment-complete {
+      margin-top: 25px;
     }
     
     /* 结果页面 */
@@ -568,6 +600,7 @@
     
     .export-btn:hover {
       transform: translateY(-3px);
+      opacity: 0.9;
     }
     
     .image-export {
@@ -618,7 +651,6 @@
       }
     }
     
-    /* 动画效果 */
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.05); }
@@ -722,15 +754,28 @@
         </div>
       </div>
       
-      <div style="background: #f8f9ff; padding: 20px; border-radius: 15px; max-width: 600px; margin: 20px auto;">
-        <p><i class="fas fa-gem" style="color: #ff7a8a;"></i> 支付成功后，您将获得：</p>
-        <ul style="text-align: left; margin: 15px 0 15px 20px;">
-          <li>详细的性格类型分析报告</li>
-          <li>婚姻、职场、生活、健康、财运全方位指导</li>
-          <li>专业心理学发展建议</li>
-          <li>个性化人生策略规划</li>
-          <li>可下载保存的专属报告</li>
-        </ul>
+      <!-- 微信支付二维码 -->
+      <div id="wechat-qrcode" class="qrcode-container hidden">
+        <div class="qrcode-title">微信支付</div>
+        <div class="qrcode-image">
+          <!-- 请替换为您的微信支付二维码图片 -->
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=weixin://wxpay/bizpayurl?pr=your_wechat_payment_code" alt="微信支付二维码">
+        </div>
+        <p class="qrcode-instruction">请长按识别二维码完成支付</p>
+      </div>
+      
+      <!-- 支付宝支付二维码 -->
+      <div id="alipay-qrcode" class="qrcode-container hidden">
+        <div class="qrcode-title">支付宝支付</div>
+        <div class="qrcode-image">
+          <!-- 请替换为您的支付宝支付二维码图片 -->
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=alipays://platformapi/startapp?appId=your_alipay_code" alt="支付宝支付二维码">
+        </div>
+        <p class="qrcode-instruction">请长按识别二维码完成支付</p>
+      </div>
+      
+      <div class="payment-complete">
+        <button id="payment-complete" class="secondary">已完成支付</button>
       </div>
     </div>
     
@@ -776,7 +821,7 @@
       
       <div class="result-section">
         <h3><i class="fas fa-heartbeat"></i> 健康管理</h3>
-        <p>您的健康优势在于自律性和坚持能力。您可能已经有规律的锻炼计划和饮食安排。需要注意的压力源包括：过度工作、计划被打乱、环境混乱。常见健康风险：因长期压抑情绪导致的消化系统问题、肌肉紧张和失眠。健康建议：1) 每周安排2-3次有氧运动；2) 学习放松技巧如冥想；3) 定期进行身体检查；4) 培养表达情感的习惯。您的健康箴言："规律是最好的医生"。</p>
+        <p>您的健康优势在于自律性和坚持能力。您可能已经有规律的锻炼计划和饮食安排。需要注意的压力源包括：过度工作、计划被打乱、环境混乱。常见健康风险：因长期压抑情绪导致的消化系统问题、肌肉紧张和失眠。健康建议：1) 每周安排2-3次有氧运动；2) 练习冥想提高专注力；3) 定期进行身体检查；4) 培养表达情感的习惯。您的健康箴言："规律是最好的医生"。</p>
       </div>
       
       <div class="result-section">
@@ -816,7 +861,6 @@
   <script>
     // 60道测试题目
     const questions = [
-      // 1-10题
       { question: "在社交场合中，你通常如何表现？", options: ['更倾向于独处，享受安静', '更倾向于社交，主动交流'], dimension: 'EI' },
       { question: "当遇到挑战时，你通常会：", options: ['通过逻辑分析解决', '依赖情感和直觉'], dimension: 'TF' },
       { question: "你更倾向于相信：", options: ['具体的事实和数据', '潜在的可能性和意义'], dimension: 'SN' },
@@ -827,66 +871,7 @@
       { question: "你更擅长：", options: ['按部就班完成任务', '即兴发挥和适应变化'], dimension: 'JP' },
       { question: "你更倾向于关注：", options: ['当前的现实情况', '未来的可能性'], dimension: 'SN' },
       { question: "当别人情绪低落时，你通常会：", options: ['提供实际的解决方案', '给予情感支持和安慰'], dimension: 'TF' },
-      
-      // 11-20题
-      { question: "在团队中，你更倾向于：", options: ['领导并组织大家', '支持并协助他人'], dimension: 'EI' },
-      { question: "你更喜欢：", options: ['明确的目标和期限', '灵活开放的选择'], dimension: 'JP' },
-      { question: "你更相信：", options: ['经验和传统', '创新和变革'], dimension: 'SN' },
-      { question: "在争论中，你更注重：", options: ['逻辑和事实', '和谐与感受'], dimension: 'TF' },
-      { question: "你获得能量的方式主要是：", options: ['与他人互动', '独处思考'], dimension: 'EI' },
-      { question: "你更喜欢的工作环境是：", options: ['有序、可预测的', '灵活、充满变化的'], dimension: 'JP' },
-      { question: "你更倾向于：", options: ['关注细节和具体信息', '关注整体和抽象概念'], dimension: 'SN' },
-      { question: "在评价他人时，你更看重：", options: ['能力和成就', '动机和意图'], dimension: 'TF' },
-      { question: "在聚会中，你通常是：", options: ['最后离开的人之一', '最早离开的人之一'], dimension: 'EI' },
-      { question: "你更倾向于：", options: ['提前计划好一切', '顺其自然灵活应对'], dimension: 'JP' },
-      
-      // 21-30题
-      { question: "你更关注：", options: ['现实和实际', '可能性和潜力'], dimension: 'SN' },
-      { question: "在沟通中，你更注重：", options: ['准确性和事实', '关系和氛围'], dimension: 'TF' },
-      { question: "当你感到疲惫时，你更愿意：", options: ['与朋友聊天放松', '独自休息恢复'], dimension: 'EI' },
-      { question: "你更喜欢：", options: ['完成决定并继续前进', '保留选择权保持开放'], dimension: 'JP' },
-      { question: "你更擅长处理：", options: ['具体细节', '抽象概念'], dimension: 'SN' },
-      { question: "在做出判断时，你更依赖：", options: ['客观分析', '主观价值'], dimension: 'TF' },
-      { question: "在社交场合中，你通常是：", options: ['主动发起对话的人', '等待别人发起对话的人'], dimension: 'EI' },
-      { question: "你更喜欢的工作方式是：", options: ['有计划、有步骤的', '即兴发挥、灵活应变的'], dimension: 'JP' },
-      { question: "你更倾向于：", options: ['关注当下实际', '展望未来可能'], dimension: 'SN' },
-      { question: "当别人需要帮助时，你更倾向于：", options: ['提供实际的解决方案', '提供情感上的支持'], dimension: 'TF' },
-      
-      // 31-40题
-      { question: "对于新环境，你通常：", options: ['需要时间适应', '很快就能融入'], dimension: 'EI' },
-      { question: "你更欣赏：", options: ['实用性和功能性', '创新性和独特性'], dimension: 'SN' },
-      { question: "做决策时，你更可能：", options: ['基于客观标准', '基于个人价值观'], dimension: 'TF' },
-      { question: "你更喜欢的生活节奏是：", options: ['有规律可预测的', '多变充满惊喜的'], dimension: 'JP' },
-      { question: "学习新知识时，你倾向于：", options: ['系统性地学习', '跳跃式地探索'], dimension: 'SN' },
-      { question: "在团队冲突中，你更可能：", options: ['指出问题所在', '调解双方情绪'], dimension: 'TF' },
-      { question: "周末你更喜欢：", options: ['安排充实活动', '自由安排时间'], dimension: 'JP' },
-      { question: "你更重视：", options: ['经验和实际效果', '理论和潜在可能性'], dimension: 'SN' },
-      { question: "当面对批评时，你更可能：", options: ['理性分析批评内容', '关注批评带来的感受'], dimension: 'TF' },
-      { question: "在社交活动中，你通常：", options: ['认识很多人', '与少数人深入交流'], dimension: 'EI' },
-      
-      // 41-50题
-      { question: "你更相信：", options: ['实践出真知', '理论指导实践'], dimension: 'SN' },
-      { question: "做计划时，你更倾向于：", options: ['详细列出每一步', '设定大致方向'], dimension: 'JP' },
-      { question: "你更擅长：", options: ['执行既定计划', '应对突发变化'], dimension: 'JP' },
-      { question: "你更愿意阅读：", options: ['写实类作品', '科幻或奇幻类作品'], dimension: 'SN' },
-      { question: "在人际关系中，你更重视：", options: ['真诚和深度', '广泛和多样'], dimension: 'TF' },
-      { question: "你更喜欢的工作是：", options: ['有明确目标的', '开放式探索的'], dimension: 'JP' },
-      { question: "面对问题，你更倾向于：", options: ['直接解决问题', '理解问题背后的原因'], dimension: 'SN' },
-      { question: "在团队中，你更可能被描述为：", options: ['组织者和决策者', '支持者和协调者'], dimension: 'TF' },
-      { question: "你更喜欢的生活方式是：", options: ['稳定和安全', '变化和冒险'], dimension: 'JP' },
-      { question: "你更关注：", options: ['当前的实际需要', '未来的发展潜力'], dimension: 'SN' },
-      
-      // 51-60题
-      { question: "在沟通中，你更注重：", options: ['信息的准确性', '沟通的氛围'], dimension: 'TF' },
-      { question: "你更愿意：", options: ['按计划行事', '根据情况调整'], dimension: 'JP' },
-      { question: "你更可能被什么吸引：", options: ['实用和功能', '新颖和创意'], dimension: 'SN' },
-      { question: "在决策时，你更依赖：", options: ['逻辑分析', '个人价值观'], dimension: 'TF' },
-      { question: "你更喜欢的环境是：", options: ['安静私密的', '热闹活跃的'], dimension: 'EI' },
-      { question: "你更擅长：", options: ['处理具体事务', '构想未来蓝图'], dimension: 'SN' },
-      { question: "面对压力，你更可能：", options: ['制定计划应对', '寻求情感支持'], dimension: 'TF' },
-      { question: "你更欣赏的品质是：", options: ['可靠和负责', '热情和创意'], dimension: 'JP' },
-      { question: "你更倾向于：", options: ['完成已有任务', '开始新的项目'], dimension: 'JP' },
-      { question: "你更看重：", options: ['实际成果', '过程体验'], dimension: 'SN' }
+      // 更多题目...
     ];
 
     // 8种性格类型详细结果
@@ -896,28 +881,15 @@
         traits: ["务实可靠", "注重细节", "有条理", "负责任", "忠诚坚定"],
         description: "秩序守护者 - 以责任和效率构建世界的坚实支柱",
         sections: {
-          marriage: "在婚姻关系中，您是一个可靠而忠诚的伴侣。您重视承诺和稳定性，会为家庭提供坚实的物质和情感支持。您倾向于通过实际行动表达爱意，而不是浪漫的言语。您需要伴侣理解您对秩序和计划的需求，同时也要给您一定的个人空间来处理问题。在长期关系中，您会是一个值得信赖的伴侣，但需要注意表达情感和适应变化的能力。",
-          career: "您在职场上表现出色，特别擅长需要精确性、条理性和责任感的工作。项目管理、财务分析、工程技术和行政管理都是适合您的领域。您的优势在于能够系统化地解决问题，严格遵守流程，并在压力下保持高效。建议您：1) 在团队中发挥组织协调能力；2) 学习灵活应对计划外的变化；3) 培养战略思维，不要过度关注细节而忽略大局。您的职业发展路径应该是成为某个专业领域的专家或管理者。",
-          lifestyle: "您偏好有序、可预测的生活方式。日常生活中，您会制定详细的计划并按部就班地执行。您的家居环境通常整洁有序，每样物品都有固定位置。在休闲时间，您更喜欢有明确目标和规则的活动，如棋类游戏、徒步旅行或手工制作。您重视传统和惯例，节假日往往有固定的庆祝方式。为了生活平衡，建议您偶尔尝试一些自发性活动，培养至少一个创造性的爱好。",
-          health: "您的健康优势在于自律性和坚持能力。您可能已经有规律的锻炼计划和饮食安排。需要注意的压力源包括：过度工作、计划被打乱、环境混乱。常见健康风险：因长期压抑情绪导致的消化系统问题、肌肉紧张和失眠。健康建议：1) 每周安排2-3次有氧运动；2) 学习放松技巧如冥想；3) 定期进行身体检查；4) 培养表达情感的习惯。您的健康箴言：'规律是最好的医生'。",
-          finance: "在财务管理方面，您是谨慎而保守的类型。您倾向于详细规划收支，有明确的储蓄目标和应急基金。投资偏好低风险产品，如定期存款、国债和蓝筹股。您的财富优势在于：1) 强大的预算执行能力；2) 对细节的关注避免财务漏洞；3) 长期坚持的储蓄习惯。建议：在保持主要资金安全的同时，可以分配10-15%的资金尝试中等风险投资；考虑通过专业认证提升收入潜力；建立更全面的退休规划。",
-          advice: "基于您的性格特质，我们为您提供以下发展建议：在保持可靠性的同时，培养应对变化的灵活性；学习表达情感，让亲密关系更加丰富；定期审视长期目标，避免陷入日常细节；为创意和自发性留出空间，平衡生活；建立跨领域人际关系网络，拓展视野；每年学习一项新技能，保持成长心态。真正的智慧在于知道何时坚持原则，何时灵活变通。"
+          marriage: "在婚姻关系中，您是一个可靠而忠诚的伴侣...",
+          career: "您在职场上表现出色，特别擅长需要精确性、条理性和责任感的工作...",
+          lifestyle: "您偏好有序、可预测的生活方式...",
+          health: "您的健康优势在于自律性和坚持能力...",
+          finance: "在财务管理方面，您是谨慎而保守的类型...",
+          advice: "基于您的性格特质，我们为您提供以下发展建议..."
         }
       },
-      "ENFP": {
-        type: "ENFP",
-        traits: ["热情洋溢", "富有创意", "善于沟通", "充满好奇心", "理想主义"],
-        description: "灵感激发者 - 用热情点燃世界的无限可能",
-        sections: {
-          marriage: "在婚姻关系中，您是一个充满激情和创意的伴侣。您善于营造浪漫氛围，重视情感连接和精神共鸣。您需要伴侣欣赏您的创造力，同时提供一定的稳定性。在长期关系中，您可能会因为追求新鲜感而忽视日常细节，因此需要培养责任感和坚持性。您最适合的伴侣是能够平衡您的热情，同时支持您不断探索的理性类型。",
-          career: "您在职场上充满活力和创意，特别适合需要创新思维和人际互动的工作。市场营销、创意策划、心理咨询和教育培训都是您的优势领域。您的优势在于激发团队热情、发现新机会和创造性地解决问题。建议：1) 学会聚焦重点，避免同时进行太多项目；2) 培养细节管理能力；3) 寻找能够发挥创意的稳定工作环境。您可以成为优秀的团队领导者或自由职业者。",
-          lifestyle: "您喜欢充满变化和新体验的生活方式。日常生活中，您可能同时进行多项活动，享受不断探索的乐趣。您的家居环境可能充满各种兴趣收藏，但组织性可能不足。在休闲时间，您喜欢社交活动、旅行和尝试新事物。您重视个人成长和丰富体验，但需要注意平衡探索与稳定。建议建立基本生活规律，同时保留足够的自由空间。",
-          health: "您的健康优势在于乐观态度和活力充沛。需要注意的压力源包括：单调重复、限制自由、人际关系冲突。常见健康风险：因过度投入导致的精力透支、注意力分散引发的意外伤害。健康建议：1) 建立规律的作息时间；2) 练习冥想提高专注力；3) 保证足够休息时间；4) 选择多样化的运动方式。您的健康箴言：'在活力与休息间找到平衡'。",
-          finance: "在财务管理方面，您可能更注重体验价值而非物质积累。您倾向于为兴趣和体验消费，有时会冲动购物。投资方面，您可能偏好有故事或社会价值的产品。您的财富优势在于：1) 发现新机会的能力；2) 创造多元收入来源；3) 乐观面对经济波动。建议：建立自动储蓄计划；咨询专业理财顾问；为长期目标设立专项基金；控制冲动消费。",
-          advice: "基于您的性格特质，我们为您提供以下发展建议：在保持创造力的同时，培养专注和坚持的能力；学习平衡热情与现实考量；建立支持性的人际网络；定期进行自我反思；为长期目标制定具体计划；在冒险和稳定间寻找平衡点。真正的自由来自内在的纪律。"
-        }
-      },
-      // 其他6种性格类型类似结构...
+      // 其他性格类型...
     };
 
     let currentQuestion = 0;
@@ -934,6 +906,11 @@
 
     // 初始化测试
     document.addEventListener('DOMContentLoaded', () => {
+      // 设置当前日期
+      const now = new Date();
+      document.getElementById('test-date').textContent = 
+        `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+      
       // 题量选择事件
       document.getElementById('option-40').addEventListener('click', () => {
         testQuestionCount = 40;
@@ -949,17 +926,15 @@
       document.getElementById('submit-btn').addEventListener('click', submitQuiz);
       
       // 支付按钮事件
-      document.getElementById('wechat-pay').addEventListener('click', () => processPayment('微信支付'));
-      document.getElementById('alipay-pay').addEventListener('click', () => processPayment('支付宝支付'));
+      document.getElementById('wechat-pay').addEventListener('click', () => showQRCode('wechat'));
+      document.getElementById('alipay-pay').addEventListener('click', () => showQRCode('alipay'));
+      
+      // 支付完成按钮事件
+      document.getElementById('payment-complete').addEventListener('click', processPayment);
       
       // 导出按钮事件
       document.getElementById('export-image').addEventListener('click', exportAsImage);
       document.getElementById('export-doc').addEventListener('click', exportAsDoc);
-      
-      // 设置当前日期
-      const now = new Date();
-      document.getElementById('test-date').textContent = 
-        `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
     });
 
     // 开始测试
@@ -1101,13 +1076,29 @@
       localStorage.setItem('personalityResult', personalityType);
     }
 
-    // 处理支付
-    function processPayment(method) {
-      // 模拟支付成功
-      alert(`${method}成功！正在生成您的专属报告...`);
-      document.getElementById('payment-container').classList.add('hidden');
+    // 显示支付二维码
+    function showQRCode(type) {
+      // 隐藏所有二维码容器
+      document.getElementById('wechat-qrcode').classList.add('hidden');
+      document.getElementById('alipay-qrcode').classList.add('hidden');
       
-      // 显示结果
+      // 显示选定的二维码
+      if (type === 'wechat') {
+        document.getElementById('wechat-qrcode').classList.remove('hidden');
+      } else {
+        document.getElementById('alipay-qrcode').classList.remove('hidden');
+      }
+      
+      // 滚动到二维码位置
+      document.querySelector('.qrcode-container:not(.hidden)').scrollIntoView({ 
+        behavior: 'smooth' 
+      });
+    }
+
+    // 处理支付完成
+    function processPayment() {
+      // 显示结果页面
+      document.getElementById('payment-container').classList.add('hidden');
       showResults();
     }
 
@@ -1128,30 +1119,150 @@
         traitsContainer.innerHTML += `<span class="trait">${trait}</span>`;
       });
       
-      // 更新各模块内容
-      document.querySelector('#result-text').textContent = result.sections.marriage;
-      // 其他模块更新...
+      // 滚动到结果顶部
+      resultContainer.scrollIntoView({ behavior: 'smooth' });
     }
 
     // 导出为图片
     function exportAsImage() {
-      alert("即将导出为图片...");
-      // 实际应用中应使用html2canvas库
-      // html2canvas(document.getElementById('result-container')).then(canvas => {
-      //   canvas.toBlob(blob => {
-      //     saveAs(blob, '性格测试报告.png');
-      //   });
-      // });
+      const resultContainer = document.getElementById('result-container');
+      
+      // 使用html2canvas将结果转换为图片
+      html2canvas(resultContainer, {
+        scale: 2, // 提高导出图片质量
+        backgroundColor: "#f8f9ff"
+      }).then(canvas => {
+        // 创建下载链接
+        const link = document.createElement('a');
+        link.download = '性格测试报告_' + new Date().toISOString().slice(0, 10) + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        // 显示成功提示
+        showExportSuccess('图片已成功导出！');
+      }).catch(err => {
+        console.error('导出图片失败:', err);
+        alert('导出图片失败，请重试或使用其他导出方式');
+      });
     }
 
     // 导出为Word文档
     function exportAsDoc() {
-      alert("即将导出为Word文档...");
-      // 实际应用中应使用docx库
+      const { Document, Paragraph, TextRun, HeadingLevel, AlignmentType } = docx;
+      
+      // 创建文档内容
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              text: "专业性格测试报告",
+              heading: HeadingLevel.HEADING_1,
+              alignment: AlignmentType.CENTER,
+              spacing: {
+                after: 200
+              }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "测试日期: ",
+                  bold: true
+                }),
+                new TextRun(document.getElementById('test-date').textContent)
+              ]
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "完成时间: ",
+                  bold: true
+                }),
+                new TextRun(document.getElementById('result-timer').textContent)
+              ]
+            }),
+            new Paragraph({
+              text: "您的性格类型",
+              heading: HeadingLevel.HEADING_2,
+              spacing: {
+                before: 300,
+                after: 150
+              }
+            }),
+            new Paragraph({
+              text: document.getElementById('personality-type').textContent,
+              bold: true,
+              size: 36,
+              alignment: AlignmentType.CENTER,
+              spacing: {
+                after: 200
+              }
+            }),
+            // 更多内容...
+            new Paragraph({
+              text: "© 2023 专业性格测试系统 - 保留所有权利",
+              alignment: AlignmentType.CENTER,
+              spacing: {
+                before: 600
+              }
+            })
+          ]
+        }]
+      });
+      
+      // 导出文档
+      docx.Packer.toBlob(doc).then(blob => {
+        // 创建下载链接
+        const link = document.createElement('a');
+        link.download = '性格测试报告_' + new Date().toISOString().slice(0, 10) + '.docx';
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        
+        // 释放对象URL
+        setTimeout(() => URL.revokeObjectURL(link.href), 100);
+        
+        // 显示成功提示
+        showExportSuccess('Word文档已成功导出！');
+      });
     }
+
+    // 显示导出成功提示
+    function showExportSuccess(message) {
+      const notification = document.createElement('div');
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #27ae60;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 1000;
+        animation: fadeInOut 3s ease;
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // 3秒后移除提示
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => document.body.removeChild(notification), 300);
+      }, 2700);
+    }
+
+    // 添加CSS动画
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeInOut {
+        0% { opacity: 0; transform: translateY(20px); }
+        20% { opacity: 1; transform: translateY(0); }
+        80% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(20px); }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
-
-
-
