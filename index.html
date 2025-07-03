@@ -3,113 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MBTI 性格测试</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 50px auto;
-      padding: 20px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    .question {
-      margin: 20px 0;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    #result {
-      margin-top: 20px;
-      text-align: center;
-    }
-  </style>
+  <title>性格测试</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>MBTI 性格测试</h1>
-    <form id="mbti-form">
-      <div class="question">
-        <label for="q1">1. 你更喜欢哪种社交方式？</label><br>
-        <input type="radio" name="q1" value="introvert"> 内向<br>
-        <input type="radio" name="q1" value="extrovert"> 外向
-      </div>
-      <div class="question">
-        <label for="q2">2. 你处理问题时更注重什么？</label><br>
-        <input type="radio" name="q2" value="thinking"> 思考<br>
-        <input type="radio" name="q2" value="feeling"> 感受
-      </div>
-      <button type="submit">提交</button>
+    <h1>性格测试</h1>
+    <p>欢迎参加我们的专业性格测试。请根据实际情况选择问题的答案。</p>
+    <form id="quiz-form">
+      <!-- 动态生成测试题 -->
     </form>
-    <div id="result"></div>
+    <button type="submit" id="submit-btn">提交</button>
   </div>
 
-  <script>
-    document.getElementById('mbti-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      
-      const answers = {
-        q1: document.querySelector('input[name="q1"]:checked')?.value,
-        q2: document.querySelector('input[name="q2"]:checked')?.value
-      };
+  <div id="payment-container" class="hidden">
+    <h2>支付查看完整结果</h2>
+    <p>请付款后查看完整的性格分析结果。</p>
+    <button id="wechat-pay">微信支付</button>
+    <button id="alipay-pay">支付宝支付</button>
+  </div>
 
-      if (!answers.q1 || !answers.q2) {
-        alert("请回答所有问题！");
-        return;
-      }
+  <div id="result-container" class="hidden">
+    <h2>您的性格结果</h2>
+    <p id="result-text"></p>
+    <h3>测试准确度反馈</h3>
+    <form id="feedback-form">
+      <label for="accuracy">您认为此次测试的准确度：</label>
+      <select name="accuracy" id="accuracy">
+        <option value="非常准确">非常准确</option>
+        <option value="比较准确">比较准确</option>
+        <option value="一般">一般</option>
+        <option value="不准确">不准确</option>
+      </select>
+      <button type="submit">提交反馈</button>
+    </form>
+  </div>
 
-      let mbtiResult = '';
-
-      if (answers.q1 === 'introvert' && answers.q2 === 'thinking') {
-        mbtiResult = '你的MBTI类型是 ISTJ';
-      } else if (answers.q1 === 'introvert' && answers.q2 === 'feeling') {
-        mbtiResult = '你的MBTI类型是 ISFJ';
-      } else if (answers.q1 === 'extrovert' && answers.q2 === 'thinking') {
-        mbtiResult = '你的MBTI类型是 ENTJ';
-      } else if (answers.q1 === 'extrovert' && answers.q2 === 'feeling') {
-        mbtiResult = '你的MBTI类型是 ENFJ';
-      }
-
-      document.getElementById('result').innerText = mbtiResult;
-
-      // 获取并输出带有追踪参数的链接
-      const trackingUrl = getTrackingUrl();
-      console.log("生成的追踪链接：", trackingUrl);
-    });
-
-    // 获取带有追踪信息的链接
-    function getTrackingUrl() {
-      const baseUrl = 'https://iqcs.qucep.com/mbti/mmbti';
-      const channel = 'zhihu'; // 假定channel信息
-      const cb = 'https://sugar.zhihu.com/ad-track/zplus_callback'; // 假定回调链接
-
-      return `${baseUrl}?channel=${channel}&cb=${encodeURIComponent(cb)}`;
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.hidden {
+  display: none;
+}
+
+#payment-container {
+  text-align: center;
+}
+
+#result-container {
+  text-align: center;
+}
+
+form {
+  margin-top: 20px;
+}
+const questions = [
+  { question: '你通常是一个内向的人吗?', options: ['是', '不是'] },
+  { question: '你更喜欢独自完成任务吗?', options: ['是', '不是'] },
+  // 这里可以添加更多问题，最多30题
+];
+
+const results = [
+  { type: 'ISTJ', description: '你是一个非常实际、谨慎的人……' },
+  { type: 'ENFP', description: '你是一个充满创意与激情的人……' },
+  // 根据不同的答案生成至少6种不同的性格结果
+];
+
+let answers = [];
+
+// 动态加载测试问题
+function loadQuestions() {
+  const form = document.getElementById('quiz-form');
+  questions.forEach((q, index) => {
+    const div = document.createElement('div');
+    div.classList.add('question');
+    div.innerHTML = `
+      <p>${q.question}</p>
+      ${q.options.map((opt, i) => `
+        <input type="radio" name="q${index}" value="${opt}" id="q${index}-${i}">
+        <label for="q${index}-${i}">${opt}</label><br>
+      `).join('')}
+    `;
+    form.appendChild(div);
+  });
+}
+
+document.getElementById('quiz-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  answers = [];
+  for (let i = 0; i < questions.length; i++) {
+    const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selectedOption) {
+      answers.push(selectedOption.value);
+    }
+  }
+
+  if (answers.length === questions.length) {
+    showPaymentScreen();
+  } else {
+    alert("请回答所有问题！");
+  }
+});
+
+// 显示支付页面
+function showPaymentScreen() {
+  document.getElementById('quiz-form').classList.add('hidden');
+  document.getElementById('payment-container').classList.remove('hidden');
+}
+
+// 支付操作
+document.getElementById('wechat-pay').addEventListener('click', function() {
+  processPayment('wechat');
+});
+document.getElementById('alipay-pay').addEventListener('click', function() {
+  processPayment('alipay');
+});
+
+function processPayment(paymentMethod) {
+  alert(`${paymentMethod}支付成功！`);
+  showResults();
+}
+
+// 显示性格结果
+function showResults() {
+  const result = getPersonalityResult();
+  document.getElementById('payment-container').classList.add('hidden');
+  document.getElementById('result-container').classList.remove('hidden');
+  document.getElementById('result-text').textContent = result.description;
+}
+
+// 根据用户选择的答案计算性格结果
+function getPersonalityResult() {
+  const personalityType = 'ISTJ'; // 根据答案来得出结果类型
+  return results.find(result => result.type === personalityType);
+}
+
+// 加载问题
+loadQuestions();
+
+
 
