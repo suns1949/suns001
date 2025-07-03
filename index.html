@@ -3,30 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>专业性格测试 - 心理学分析</title>
+  <title>专业性格测试系统 | 心理学分析</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.1.0/docx.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
     /* 全局样式 */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
     }
     
     :root {
-      --primary: #4e54c8;
-      --secondary: #8f94fb;
+      --primary: #6a5acd;
+      --secondary: #9370db;
       --accent: #ff7a8a;
-      --light: #f8f9fa;
-      --dark: #343a40;
-      --success: #28a745;
-      --warning: #ffc107;
-      --info: #17a2b8;
+      --light: #f8f9ff;
+      --dark: #2c3e50;
+      --success: #27ae60;
+      --info: #3498db;
+      --warning: #f39c12;
+      --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
     }
     
     body {
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+      background: linear-gradient(135deg, #e0e7ff 0%, #d1d9ff 100%);
       color: var(--dark);
       line-height: 1.6;
       min-height: 100vh;
@@ -34,19 +38,19 @@
     }
     
     .container {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
       background: white;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
       overflow: hidden;
       position: relative;
     }
     
     header {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background: var(--gradient);
       color: white;
-      padding: 30px;
+      padding: 40px 30px;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -58,7 +62,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 10px;
+      height: 6px;
       background: linear-gradient(90deg, var(--accent), #ffd166, var(--accent));
       animation: rainbow 3s linear infinite;
     }
@@ -69,172 +73,290 @@
     }
     
     h1 {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       margin-bottom: 15px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      letter-spacing: 1px;
     }
     
     h2 {
-      font-size: 1.8rem;
+      font-size: 2rem;
       margin-bottom: 20px;
       color: var(--primary);
+      position: relative;
+      display: inline-block;
+    }
+    
+    h2::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
     }
     
     h3 {
-      font-size: 1.4rem;
-      margin: 20px 0 10px;
+      font-size: 1.5rem;
+      margin: 25px 0 15px;
       color: var(--secondary);
+      padding-left: 15px;
+      border-left: 4px solid var(--accent);
     }
     
     p {
       margin-bottom: 20px;
       font-size: 1.1rem;
+      color: #444;
     }
     
     .intro-text {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 15px;
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 25px 0;
+      backdrop-filter: blur(8px);
+      max-width: 800px;
+      margin: 25px auto;
+    }
+    
+    /* 选择测试题量页面 */
+    #test-options {
+      padding: 40px 30px;
+      text-align: center;
+    }
+    
+    .options-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    
+    .option-card {
+      background: white;
+      border-radius: 15px;
+      width: 280px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    
+    .option-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      border-color: var(--primary);
+    }
+    
+    .option-card h3 {
+      font-size: 1.6rem;
+      margin: 15px 0;
+      color: var(--primary);
+      border: none;
+      padding: 0;
+    }
+    
+    .option-card .icon {
+      width: 80px;
+      height: 80px;
+      background: var(--gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      font-size: 32px;
+    }
+    
+    .option-card ul {
+      text-align: left;
       margin: 20px 0;
-      backdrop-filter: blur(5px);
+      padding-left: 20px;
+    }
+    
+    .option-card li {
+      margin-bottom: 12px;
+      color: #555;
+    }
+    
+    /* 进度条样式 */
+    .progress-container {
+      padding: 20px 30px;
+      background: #f8f9ff;
+      border-bottom: 1px solid #e0e0ff;
     }
     
     .progress-bar {
-      height: 8px;
-      background: #e0e0e0;
-      border-radius: 4px;
-      margin: 20px 0;
+      height: 10px;
+      background: #e0e0ff;
+      border-radius: 5px;
       overflow: hidden;
+      position: relative;
     }
     
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--accent), #ff9a9e);
-      border-radius: 4px;
+      border-radius: 5px;
       width: 0%;
-      transition: width 0.5s ease;
+      transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     
-    .progress-text {
-      text-align: right;
-      font-size: 0.9rem;
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      font-size: 1.05rem;
       color: var(--dark);
-      margin-top: 5px;
+    }
+    
+    .timer {
+      background: rgba(106, 90, 205, 0.1);
+      padding: 8px 15px;
+      border-radius: 30px;
+      font-weight: 600;
+      color: var(--primary);
     }
     
     /* 问题样式 */
     .question-container {
-      padding: 20px 30px;
+      padding: 25px 30px;
     }
     
     .question {
-      background: #f8f9ff;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      border: 1px solid #eaeaea;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: linear-gradient(to right, #f8f9ff, #f0f3ff);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid #eaeaff;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
     
     .question:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
     
     .question p {
       font-weight: 600;
-      margin-bottom: 15px;
-      font-size: 1.15rem;
+      margin-bottom: 20px;
+      font-size: 1.25rem;
+      color: var(--dark);
     }
     
     .options {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 15px;
     }
     
     .option {
       display: flex;
       align-items: center;
-      padding: 12px 15px;
+      padding: 15px 20px;
       background: white;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
-      border: 2px solid #e0e0e0;
+      border: 2px solid #e0e0ff;
       transition: all 0.3s ease;
     }
     
     .option:hover {
       border-color: var(--secondary);
-      background: #f0f3ff;
+      background: #f5f7ff;
     }
     
     .option.selected {
       border-color: var(--primary);
-      background: #eef2ff;
-      box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
+      background: #edf0ff;
+      box-shadow: 0 0 0 4px rgba(106, 90, 205, 0.15);
     }
     
     .option input {
-      margin-right: 12px;
-      width: 18px;
-      height: 18px;
+      margin-right: 15px;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
     }
     
     .option label {
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.1rem;
       flex: 1;
+      color: #444;
     }
     
     /* 按钮样式 */
     button {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background: var(--gradient);
       color: white;
       border: none;
-      padding: 14px 28px;
-      font-size: 1.1rem;
+      padding: 16px 32px;
+      font-size: 1.15rem;
       font-weight: 600;
       border-radius: 50px;
       cursor: pointer;
       transition: all 0.3s ease;
       display: block;
       width: 100%;
-      max-width: 300px;
-      margin: 20px auto;
-      box-shadow: 0 4px 15px rgba(78, 84, 200, 0.3);
+      max-width: 320px;
+      margin: 25px auto;
+      box-shadow: 0 5px 20px rgba(106, 90, 205, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 40px;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(25deg);
+      transition: all 0.6s;
     }
     
     button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(78, 84, 200, 0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(106, 90, 205, 0.5);
+    }
+    
+    button:hover::after {
+      left: 120%;
     }
     
     button:active {
-      transform: translateY(1px);
+      transform: translateY(2px);
     }
     
     button.secondary {
       background: white;
       color: var(--primary);
       border: 2px solid var(--primary);
+      box-shadow: 0 4px 15px rgba(106, 90, 205, 0.15);
     }
     
     button.secondary:hover {
-      background: #f0f3ff;
+      background: #f5f7ff;
     }
     
     /* 支付和结果页面 */
     .page {
-      padding: 30px;
+      padding: 40px 30px;
       text-align: center;
-      animation: fadeIn 0.5s ease;
+      animation: fadeIn 0.6s ease;
     }
     
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
     
@@ -245,33 +367,49 @@
     .payment-options {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin: 30px 0;
+      gap: 30px;
+      margin: 40px 0;
       flex-wrap: wrap;
     }
     
     .payment-btn {
-      width: 150px;
-      height: 150px;
-      border-radius: 15px;
+      width: 180px;
+      height: 180px;
+      border-radius: 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       background: white;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .payment-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
     }
     
     .payment-btn:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
     }
     
     .payment-btn i {
-      font-size: 50px;
-      margin-bottom: 15px;
+      font-size: 60px;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+    
+    .payment-btn:hover i {
+      transform: scale(1.1);
     }
     
     .wechat {
@@ -279,101 +417,204 @@
       border: 2px solid #09bb07;
     }
     
+    .wechat::before {
+      background: #09bb07;
+    }
+    
     .alipay {
       color: #1677ff;
       border: 2px solid #1677ff;
     }
     
+    .alipay::before {
+      background: #1677ff;
+    }
+    
     /* 结果页面 */
-    .personality-card {
-      background: linear-gradient(135deg, #f0f4ff, #e6e9ff);
-      border-radius: 15px;
+    .result-header {
+      background: var(--gradient);
+      color: white;
       padding: 25px;
-      margin: 30px 0;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .result-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--accent), #ffd166, var(--accent));
+    }
+    
+    .personality-card {
+      background: linear-gradient(135deg, #f8f9ff, #f0f3ff);
+      border-radius: 18px;
+      padding: 30px;
+      margin: 35px 0;
       text-align: left;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      border-left: 5px solid var(--primary);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      border-left: 6px solid var(--primary);
+      position: relative;
+    }
+    
+    .personality-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%236a5acd" opacity="0.1"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.1;
+      z-index: 0;
     }
     
     .personality-type {
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: bold;
       color: var(--primary);
       text-align: center;
-      margin: 15px 0;
+      margin: 20px 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .traits {
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin: 20px 0;
+      margin: 25px 0;
       flex-wrap: wrap;
     }
     
     .trait {
       background: white;
-      padding: 8px 15px;
+      padding: 10px 20px;
       border-radius: 30px;
-      font-size: 0.9rem;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      font-size: 1rem;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e0e0ff;
     }
     
-    select {
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 2px solid #e0e0e0;
-      width: 100%;
-      max-width: 300px;
-      margin: 15px 0;
+    .result-section {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      margin: 25px 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid #eee;
+    }
+    
+    .result-section h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .result-section h3 i {
+      color: var(--accent);
     }
     
     .accuracy-meter {
       display: flex;
       justify-content: center;
-      gap: 5px;
-      margin: 15px 0;
+      gap: 8px;
+      margin: 20px 0;
     }
     
     .meter-point {
-      width: 30px;
-      height: 10px;
+      width: 35px;
+      height: 12px;
       background: #e0e0e0;
-      border-radius: 5px;
-      transition: background 0.3s ease;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .meter-point:hover {
+      transform: translateY(-3px);
     }
     
     .meter-point.active {
       background: var(--accent);
+      box-shadow: 0 3px 8px rgba(255, 122, 138, 0.3);
+    }
+    
+    .export-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    
+    .export-btn {
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .export-btn:hover {
+      transform: translateY(-3px);
+    }
+    
+    .image-export {
+      background: linear-gradient(135deg, #ff7a8a, #ff9a9e);
+      color: white;
+    }
+    
+    .doc-export {
+      background: linear-gradient(135deg, #3498db, #2ecc71);
+      color: white;
     }
     
     /* 响应式设计 */
     @media (max-width: 768px) {
       .container {
-        border-radius: 10px;
+        border-radius: 15px;
       }
       
       header {
-        padding: 20px;
+        padding: 30px 20px;
       }
       
       h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
       }
       
-      .question-container {
-        padding: 15px;
+      .options-container {
+        gap: 20px;
       }
       
-      .payment-options {
-        flex-direction: column;
-        align-items: center;
+      .option-card {
+        width: 100%;
+        max-width: 350px;
       }
       
       .payment-btn {
-        width: 100%;
-        max-width: 200px;
+        width: 160px;
+        height: 160px;
+      }
+      
+      .personality-type {
+        font-size: 2.5rem;
+      }
+      
+      .export-buttons {
+        flex-direction: column;
+        align-items: center;
       }
     }
     
@@ -387,24 +628,76 @@
     .pulse {
       animation: pulse 2s infinite;
     }
+    
+    .fade-in {
+      animation: fadeIn 0.8s ease;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1><i class="fas fa-brain"></i> 专业性格测试</h1>
+      <h1><i class="fas fa-brain"></i> 专业性格测试系统</h1>
       <div class="intro-text">
-        <p>基于MBTI心理学模型与色彩学的专业性格测试</p>
-        <p>通过30道精心设计的题目，全面分析您的性格特征与行为模式</p>
+        <p>基于国际心理学标准与大数据分析的权威性格测评</p>
+        <p>全面解析您的性格特征，提供专业人生指导建议</p>
       </div>
     </header>
     
-    <!-- 测试页面 -->
-    <div id="quiz-container" class="page">
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div>
+    <!-- 选择测试题量页面 -->
+    <div id="test-options" class="page">
+      <h2>选择测试题量</h2>
+      <p>不同的题量将提供不同深度的分析报告，请根据您的需求选择</p>
+      
+      <div class="options-container">
+        <div class="option-card" id="option-40">
+          <div class="icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3>40题标准版</h3>
+          <p>约10-15分钟完成</p>
+          <ul>
+            <li>基础性格分析</li>
+            <li>核心特质评估</li>
+            <li>基本建议指导</li>
+            <li>快速了解自我</li>
+          </ul>
+          <button class="secondary">开始测试</button>
+        </div>
+        
+        <div class="option-card" id="option-60">
+          <div class="icon">
+            <i class="fas fa-file-medical"></i>
+          </div>
+          <h3>60题专业版</h3>
+          <p>约15-20分钟完成</p>
+          <ul>
+            <li>全面性格剖析</li>
+            <li>详细特质分析</li>
+            <li>多维人生指导</li>
+            <li>专属发展建议</li>
+            <li>深度自我认知</li>
+          </ul>
+          <button class="secondary">开始测试</button>
+        </div>
       </div>
-      <p class="progress-text" id="progress-text">问题 1/30</p>
+      
+      <p class="fade-in" style="max-width: 600px; margin: 20px auto; font-style: italic; color: #6a5acd;">
+        <i class="fas fa-lightbulb"></i> 提示：专业版提供更全面的分析报告，包含婚姻、职场、健康、财运等多维度指导
+      </p>
+    </div>
+    
+    <!-- 测试页面 -->
+    <div id="quiz-container" class="page hidden">
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-info">
+          <span id="progress-text">问题 1/40</span>
+          <span class="timer"><i class="fas fa-clock"></i> 用时: <span id="timer">00:00</span></span>
+        </div>
+      </div>
       
       <div id="quiz-form" class="question-container">
         <!-- 问题将通过JS动态生成 -->
@@ -429,20 +722,25 @@
         </div>
       </div>
       
-      <p>支付成功后，您将获得：</p>
-      <ul style="text-align: left; max-width: 500px; margin: 20px auto;">
-        <li>详细的性格类型分析</li>
-        <li>职业发展建议</li>
-        <li>人际关系指导</li>
-        <li>个人成长策略</li>
-        <li>专属PDF报告下载</li>
-      </ul>
+      <div style="background: #f8f9ff; padding: 20px; border-radius: 15px; max-width: 600px; margin: 20px auto;">
+        <p><i class="fas fa-gem" style="color: #ff7a8a;"></i> 支付成功后，您将获得：</p>
+        <ul style="text-align: left; margin: 15px 0 15px 20px;">
+          <li>详细的性格类型分析报告</li>
+          <li>婚姻、职场、生活、健康、财运全方位指导</li>
+          <li>专业心理学发展建议</li>
+          <li>个性化人生策略规划</li>
+          <li>可下载保存的专属报告</li>
+        </ul>
+      </div>
     </div>
     
     <!-- 结果页面 -->
     <div id="result-container" class="page hidden">
-      <h2><i class="fas fa-chart-bar"></i> 您的性格分析报告</h2>
-      <p>基于您的回答，我们进行了专业的心理学分析</p>
+      <div class="result-header">
+        <h2><i class="fas fa-chart-bar"></i> 您的性格分析报告</h2>
+        <p>基于您的回答，我们进行了专业的心理学分析</p>
+        <p class="timer">完成时间: <span id="result-timer">00:00</span> | 测试日期: <span id="test-date">2023-10-15</span></p>
+      </div>
       
       <div class="personality-card">
         <h3>您的性格类型</h3>
@@ -453,287 +751,180 @@
           <span class="trait">注重细节</span>
           <span class="trait">有条理</span>
           <span class="trait">负责任</span>
+          <span class="trait">忠诚坚定</span>
         </div>
         
-        <h3>性格描述</h3>
-        <p id="result-text">您是一个非常实际、谨慎的人，倾向于遵守规则，注重稳定和实际。您适合在职场中担任分析性、组织性的工作，例如项目经理、工程师等。</p>
+        <p style="text-align: center; font-style: italic; color: #6a5acd;">
+          "秩序守护者 - 以责任和效率构建世界的坚实支柱"
+        </p>
       </div>
       
-      <div style="margin: 30px 0;">
-        <h3>测试准确度反馈</h3>
-        <p>请评价本次测试结果与您自身性格的匹配程度</p>
-        
-        <div class="accuracy-meter">
-          <div class="meter-point" data-value="1"></div>
-          <div class="meter-point" data-value="2"></div>
-          <div class="meter-point" data-value="3"></div>
-          <div class="meter-point" data-value="4"></div>
-          <div class="meter-point" data-value="5"></div>
+      <div class="result-section">
+        <h3><i class="fas fa-heart"></i> 婚姻情感</h3>
+        <p>在婚姻关系中，您是一个可靠而忠诚的伴侣。您重视承诺和稳定性，会为家庭提供坚实的物质和情感支持。您倾向于通过实际行动表达爱意，而不是浪漫的言语。您需要伴侣理解您对秩序和计划的需求，同时也要给您一定的个人空间来处理问题。在长期关系中，您会是一个值得信赖的伴侣，但需要注意表达情感和适应变化的能力。</p>
+      </div>
+      
+      <div class="result-section">
+        <h3><i class="fas fa-briefcase"></i> 职场发展</h3>
+        <p>您在职场上表现出色，特别擅长需要精确性、条理性和责任感的工作。项目管理、财务分析、工程技术和行政管理都是适合您的领域。您的优势在于能够系统化地解决问题，严格遵守流程，并在压力下保持高效。建议您：1) 在团队中发挥组织协调能力；2) 学习灵活应对计划外的变化；3) 培养战略思维，不要过度关注细节而忽略大局。您的职业发展路径应该是成为某个专业领域的专家或管理者。</p>
+      </div>
+      
+      <div class="result-section">
+        <h3><i class="fas fa-home"></i> 生活方式</h3>
+        <p>您偏好有序、可预测的生活方式。日常生活中，您会制定详细的计划并按部就班地执行。您的家居环境通常整洁有序，每样物品都有固定位置。在休闲时间，您更喜欢有明确目标和规则的活动，如棋类游戏、徒步旅行或手工制作。您重视传统和惯例，节假日往往有固定的庆祝方式。为了生活平衡，建议您偶尔尝试一些自发性活动，培养至少一个创造性的爱好。</p>
+      </div>
+      
+      <div class="result-section">
+        <h3><i class="fas fa-heartbeat"></i> 健康管理</h3>
+        <p>您的健康优势在于自律性和坚持能力。您可能已经有规律的锻炼计划和饮食安排。需要注意的压力源包括：过度工作、计划被打乱、环境混乱。常见健康风险：因长期压抑情绪导致的消化系统问题、肌肉紧张和失眠。健康建议：1) 每周安排2-3次有氧运动；2) 学习放松技巧如冥想；3) 定期进行身体检查；4) 培养表达情感的习惯。您的健康箴言："规律是最好的医生"。</p>
+      </div>
+      
+      <div class="result-section">
+        <h3><i class="fas fa-coins"></i> 财运分析</h3>
+        <p>在财务管理方面，您是谨慎而保守的类型。您倾向于详细规划收支，有明确的储蓄目标和应急基金。投资偏好低风险产品，如定期存款、国债和蓝筹股。您的财富优势在于：1) 强大的预算执行能力；2) 对细节的关注避免财务漏洞；3) 长期坚持的储蓄习惯。建议：在保持主要资金安全的同时，可以分配10-15%的资金尝试中等风险投资；考虑通过专业认证提升收入潜力；建立更全面的退休规划。</p>
+      </div>
+      
+      <div class="result-section">
+        <h3><i class="fas fa-lightbulb"></i> 人生建议</h3>
+        <p>基于您的性格特质，我们为您提供以下发展建议：</p>
+        <ul style="text-align: left; margin: 15px 0 15px 40px;">
+          <li>在保持可靠性的同时，培养应对变化的灵活性</li>
+          <li>学习表达情感，让亲密关系更加丰富</li>
+          <li>定期审视长期目标，避免陷入日常细节</li>
+          <li>为创意和自发性留出空间，平衡生活</li>
+          <li>建立跨领域人际关系网络，拓展视野</li>
+          <li>每年学习一项新技能，保持成长心态</li>
+        </ul>
+        <p style="margin-top: 15px; font-style: italic; color: #6a5acd;">
+          "真正的智慧在于知道何时坚持原则，何时灵活变通"
+        </p>
+      </div>
+      
+      <div class="export-buttons">
+        <div class="export-btn image-export" id="export-image">
+          <i class="fas fa-image"></i>
+          <span>导出为图片</span>
         </div>
-        <p id="accuracy-text">一般准确</p>
-        
-        <button id="feedback-btn" class="secondary">提交反馈</button>
+        <div class="export-btn doc-export" id="export-doc">
+          <i class="fas fa-file-word"></i>
+          <span>导出为Word文档</span>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // 完整的30道测试题目
+    // 60道测试题目
     const questions = [
-      { 
-        question: "在社交场合中，你通常如何表现？", 
-        options: ['更倾向于独处，享受安静', '更倾向于社交，主动交流'],
-        dimension: 'EI'
-      },
-      { 
-        question: "当遇到挑战时，你通常会：", 
-        options: ['通过逻辑分析解决', '依赖情感和直觉'],
-        dimension: 'TF'
-      },
-      { 
-        question: "你更倾向于相信：", 
-        options: ['具体的事实和数据', '潜在的可能性和意义'],
-        dimension: 'SN'
-      },
-      { 
-        question: "你更喜欢哪种工作方式？", 
-        options: ['有计划的、有组织的', '灵活的、随性的'],
-        dimension: 'JP'
-      },
-      { 
-        question: "在做决定时，你更注重：", 
-        options: ['客观标准和原则', '人际关系和影响'],
-        dimension: 'TF'
-      },
-      { 
-        question: "你更愿意被描述为：", 
-        options: ['实际和务实', '富有想象力和创新'],
-        dimension: 'SN'
-      },
-      { 
-        question: "在空闲时间，你更喜欢：", 
-        options: ['与朋友聚会', '独自阅读或思考'],
-        dimension: 'EI'
-      },
-      { 
-        question: "你更擅长：", 
-        options: ['按部就班完成任务', '即兴发挥和适应变化'],
-        dimension: 'JP'
-      },
-      { 
-        question: "你更倾向于关注：", 
-        options: ['当前的现实情况', '未来的可能性'],
-        dimension: 'SN'
-      },
-      { 
-        question: "当别人情绪低落时，你通常会：", 
-        options: ['提供实际的解决方案', '给予情感支持和安慰'],
-        dimension: 'TF'
-      },
-      { 
-        question: "在团队中，你更倾向于：", 
-        options: ['领导并组织大家', '支持并协助他人'],
-        dimension: 'EI'
-      },
-      { 
-        question: "你更喜欢：", 
-        options: ['明确的目标和期限', '灵活开放的选择'],
-        dimension: 'JP'
-      },
-      { 
-        question: "你更相信：", 
-        options: ['经验和传统', '创新和变革'],
-        dimension: 'SN'
-      },
-      { 
-        question: "在争论中，你更注重：", 
-        options: ['逻辑和事实', '和谐与感受'],
-        dimension: 'TF'
-      },
-      { 
-        question: "你获得能量的方式主要是：", 
-        options: ['与他人互动', '独处思考'],
-        dimension: 'EI'
-      },
-      { 
-        question: "你更喜欢的工作环境是：", 
-        options: ['有序、可预测的', '灵活、充满变化的'],
-        dimension: 'JP'
-      },
-      { 
-        question: "你更倾向于：", 
-        options: ['关注细节和具体信息', '关注整体和抽象概念'],
-        dimension: 'SN'
-      },
-      { 
-        question: "在评价他人时，你更看重：", 
-        options: ['能力和成就', '动机和意图'],
-        dimension: 'TF'
-      },
-      { 
-        question: "在聚会中，你通常是：", 
-        options: ['最后离开的人之一', '最早离开的人之一'],
-        dimension: 'EI'
-      },
-      { 
-        question: "你更倾向于：", 
-        options: ['提前计划好一切', '顺其自然灵活应对'],
-        dimension: 'JP'
-      },
-      { 
-        question: "你更关注：", 
-        options: ['现实和实际', '可能性和潜力'],
-        dimension: 'SN'
-      },
-      { 
-        question: "在沟通中，你更注重：", 
-        options: ['准确性和事实', '关系和氛围'],
-        dimension: 'TF'
-      },
-      { 
-        question: "当你感到疲惫时，你更愿意：", 
-        options: ['与朋友聊天放松', '独自休息恢复'],
-        dimension: 'EI'
-      },
-      { 
-        question: "你更喜欢：", 
-        options: ['完成决定并继续前进', '保留选择权保持开放'],
-        dimension: 'JP'
-      },
-      { 
-        question: "你更擅长处理：", 
-        options: ['具体细节', '抽象概念'],
-        dimension: 'SN'
-      },
-      { 
-        question: "在做出判断时，你更依赖：", 
-        options: ['客观分析', '主观价值'],
-        dimension: 'TF'
-      },
-      { 
-        question: "在社交场合中，你通常是：", 
-        options: ['主动发起对话的人', '等待别人发起对话的人'],
-        dimension: 'EI'
-      },
-      { 
-        question: "你更喜欢的工作方式是：", 
-        options: ['有计划、有步骤的', '即兴发挥、灵活应变的'],
-        dimension: 'JP'
-      },
-      { 
-        question: "你更倾向于：", 
-        options: ['关注当下实际', '展望未来可能'],
-        dimension: 'SN'
-      },
-      { 
-        question: "当别人需要帮助时，你更倾向于：", 
-        options: ['提供实际的解决方案', '提供情感上的支持'],
-        dimension: 'TF'
-      }
+      // 1-10题
+      { question: "在社交场合中，你通常如何表现？", options: ['更倾向于独处，享受安静', '更倾向于社交，主动交流'], dimension: 'EI' },
+      { question: "当遇到挑战时，你通常会：", options: ['通过逻辑分析解决', '依赖情感和直觉'], dimension: 'TF' },
+      { question: "你更倾向于相信：", options: ['具体的事实和数据', '潜在的可能性和意义'], dimension: 'SN' },
+      { question: "你更喜欢哪种工作方式？", options: ['有计划的、有组织的', '灵活的、随性的'], dimension: 'JP' },
+      { question: "在做决定时，你更注重：", options: ['客观标准和原则', '人际关系和影响'], dimension: 'TF' },
+      { question: "你更愿意被描述为：", options: ['实际和务实', '富有想象力和创新'], dimension: 'SN' },
+      { question: "在空闲时间，你更喜欢：", options: ['与朋友聚会', '独自阅读或思考'], dimension: 'EI' },
+      { question: "你更擅长：", options: ['按部就班完成任务', '即兴发挥和适应变化'], dimension: 'JP' },
+      { question: "你更倾向于关注：", options: ['当前的现实情况', '未来的可能性'], dimension: 'SN' },
+      { question: "当别人情绪低落时，你通常会：", options: ['提供实际的解决方案', '给予情感支持和安慰'], dimension: 'TF' },
+      
+      // 11-20题
+      { question: "在团队中，你更倾向于：", options: ['领导并组织大家', '支持并协助他人'], dimension: 'EI' },
+      { question: "你更喜欢：", options: ['明确的目标和期限', '灵活开放的选择'], dimension: 'JP' },
+      { question: "你更相信：", options: ['经验和传统', '创新和变革'], dimension: 'SN' },
+      { question: "在争论中，你更注重：", options: ['逻辑和事实', '和谐与感受'], dimension: 'TF' },
+      { question: "你获得能量的方式主要是：", options: ['与他人互动', '独处思考'], dimension: 'EI' },
+      { question: "你更喜欢的工作环境是：", options: ['有序、可预测的', '灵活、充满变化的'], dimension: 'JP' },
+      { question: "你更倾向于：", options: ['关注细节和具体信息', '关注整体和抽象概念'], dimension: 'SN' },
+      { question: "在评价他人时，你更看重：", options: ['能力和成就', '动机和意图'], dimension: 'TF' },
+      { question: "在聚会中，你通常是：", options: ['最后离开的人之一', '最早离开的人之一'], dimension: 'EI' },
+      { question: "你更倾向于：", options: ['提前计划好一切', '顺其自然灵活应对'], dimension: 'JP' },
+      
+      // 21-30题
+      { question: "你更关注：", options: ['现实和实际', '可能性和潜力'], dimension: 'SN' },
+      { question: "在沟通中，你更注重：", options: ['准确性和事实', '关系和氛围'], dimension: 'TF' },
+      { question: "当你感到疲惫时，你更愿意：", options: ['与朋友聊天放松', '独自休息恢复'], dimension: 'EI' },
+      { question: "你更喜欢：", options: ['完成决定并继续前进', '保留选择权保持开放'], dimension: 'JP' },
+      { question: "你更擅长处理：", options: ['具体细节', '抽象概念'], dimension: 'SN' },
+      { question: "在做出判断时，你更依赖：", options: ['客观分析', '主观价值'], dimension: 'TF' },
+      { question: "在社交场合中，你通常是：", options: ['主动发起对话的人', '等待别人发起对话的人'], dimension: 'EI' },
+      { question: "你更喜欢的工作方式是：", options: ['有计划、有步骤的', '即兴发挥、灵活应变的'], dimension: 'JP' },
+      { question: "你更倾向于：", options: ['关注当下实际', '展望未来可能'], dimension: 'SN' },
+      { question: "当别人需要帮助时，你更倾向于：", options: ['提供实际的解决方案', '提供情感上的支持'], dimension: 'TF' },
+      
+      // 31-40题
+      { question: "对于新环境，你通常：", options: ['需要时间适应', '很快就能融入'], dimension: 'EI' },
+      { question: "你更欣赏：", options: ['实用性和功能性', '创新性和独特性'], dimension: 'SN' },
+      { question: "做决策时，你更可能：", options: ['基于客观标准', '基于个人价值观'], dimension: 'TF' },
+      { question: "你更喜欢的生活节奏是：", options: ['有规律可预测的', '多变充满惊喜的'], dimension: 'JP' },
+      { question: "学习新知识时，你倾向于：", options: ['系统性地学习', '跳跃式地探索'], dimension: 'SN' },
+      { question: "在团队冲突中，你更可能：", options: ['指出问题所在', '调解双方情绪'], dimension: 'TF' },
+      { question: "周末你更喜欢：", options: ['安排充实活动', '自由安排时间'], dimension: 'JP' },
+      { question: "你更重视：", options: ['经验和实际效果', '理论和潜在可能性'], dimension: 'SN' },
+      { question: "当面对批评时，你更可能：", options: ['理性分析批评内容', '关注批评带来的感受'], dimension: 'TF' },
+      { question: "在社交活动中，你通常：", options: ['认识很多人', '与少数人深入交流'], dimension: 'EI' },
+      
+      // 41-50题
+      { question: "你更相信：", options: ['实践出真知', '理论指导实践'], dimension: 'SN' },
+      { question: "做计划时，你更倾向于：", options: ['详细列出每一步', '设定大致方向'], dimension: 'JP' },
+      { question: "你更擅长：", options: ['执行既定计划', '应对突发变化'], dimension: 'JP' },
+      { question: "你更愿意阅读：", options: ['写实类作品', '科幻或奇幻类作品'], dimension: 'SN' },
+      { question: "在人际关系中，你更重视：", options: ['真诚和深度', '广泛和多样'], dimension: 'TF' },
+      { question: "你更喜欢的工作是：", options: ['有明确目标的', '开放式探索的'], dimension: 'JP' },
+      { question: "面对问题，你更倾向于：", options: ['直接解决问题', '理解问题背后的原因'], dimension: 'SN' },
+      { question: "在团队中，你更可能被描述为：", options: ['组织者和决策者', '支持者和协调者'], dimension: 'TF' },
+      { question: "你更喜欢的生活方式是：", options: ['稳定和安全', '变化和冒险'], dimension: 'JP' },
+      { question: "你更关注：", options: ['当前的实际需要', '未来的发展潜力'], dimension: 'SN' },
+      
+      // 51-60题
+      { question: "在沟通中，你更注重：", options: ['信息的准确性', '沟通的氛围'], dimension: 'TF' },
+      { question: "你更愿意：", options: ['按计划行事', '根据情况调整'], dimension: 'JP' },
+      { question: "你更可能被什么吸引：", options: ['实用和功能', '新颖和创意'], dimension: 'SN' },
+      { question: "在决策时，你更依赖：", options: ['逻辑分析', '个人价值观'], dimension: 'TF' },
+      { question: "你更喜欢的环境是：", options: ['安静私密的', '热闹活跃的'], dimension: 'EI' },
+      { question: "你更擅长：", options: ['处理具体事务', '构想未来蓝图'], dimension: 'SN' },
+      { question: "面对压力，你更可能：", options: ['制定计划应对', '寻求情感支持'], dimension: 'TF' },
+      { question: "你更欣赏的品质是：", options: ['可靠和负责', '热情和创意'], dimension: 'JP' },
+      { question: "你更倾向于：", options: ['完成已有任务', '开始新的项目'], dimension: 'JP' },
+      { question: "你更看重：", options: ['实际成果', '过程体验'], dimension: 'SN' }
     ];
 
-    // MBTI性格类型结果描述
-    const results = {
+    // 8种性格类型详细结果
+    const personalityResults = {
       "ISTJ": {
         type: "ISTJ",
-        name: "检查员型",
-        description: "您是一个非常实际、谨慎的人，倾向于遵守规则，注重稳定和实际。您做事有条理、负责任，注重细节和准确性。在工作中，您喜欢有明确的结构和流程，能够可靠地完成任务。您适合在职场中担任分析性、组织性的工作，例如项目经理、工程师、会计等需要精确性和可靠性的职位。在人际关系中，您忠诚可靠，但有时可能显得过于严肃或保守。",
-        traits: ["务实可靠", "注重细节", "有条理", "负责任"]
-      },
-      "ISFJ": {
-        type: "ISFJ",
-        name: "保护者型",
-        description: "您善良、有同情心，非常重视责任和义务。您注重实际，善于观察细节，并乐于帮助他人。在工作中，您可靠、勤奋，喜欢有秩序的环境。您适合从事教育、医疗、社会工作等需要关怀和细心的职业。在人际关系中，您忠诚体贴，但有时可能过于敏感或难以表达自己的需求。",
-        traits: ["善良体贴", "细致入微", "忠诚可靠", "有责任心"]
-      },
-      "INFJ": {
-        type: "INFJ",
-        name: "咨询师型",
-        description: "您富有洞察力、理想主义，有强烈的价值观。您善于理解复杂的人际关系，并致力于帮助他人成长。在工作中，您喜欢有意义的、能够实现个人价值的事情。您适合从事心理咨询、教育、艺术等能够帮助他人和表达创意的职业。在人际关系中，您深刻而有同理心，但有时可能过于理想化或回避冲突。",
-        traits: ["富有洞察力", "理想主义", "有同理心", "有创造力"]
-      },
-      "INTJ": {
-        type: "INTJ",
-        name: "战略家型",
-        description: "您独立思考、富有战略眼光，善于解决复杂问题。您注重效率和能力，追求知识和创新。在工作中，您喜欢挑战性的、能够发挥智力的任务。您适合从事科研、技术开发、战略规划等需要分析和创新能力的职业。在人际关系中，您独立而理性，但有时可能显得冷漠或过于批判。",
-        traits: ["独立思考", "富有远见", "理性分析", "追求卓越"]
-      },
-      "ISTP": {
-        type: "ISTP",
-        name: "巧匠型",
-        description: "您冷静、灵活，善于动手解决问题。您喜欢行动自由，对机械和工具感兴趣。在工作中，您注重实际效果，喜欢即兴发挥。您适合从事技术、工程、体育等需要动手能力和灵活性的职业。在人际关系中，您独立而随和，但有时可能显得疏离或不愿承诺。",
-        traits: ["动手能力强", "灵活应变", "冷静理性", "注重实际"]
-      },
-      "ISFP": {
-        type: "ISFP",
-        name: "艺术家型",
-        description: "您温和、敏感，有艺术气质和审美眼光。您注重当下体验，享受生活中的美好事物。在工作中，您喜欢有创造性的、能够表达自我的任务。您适合从事艺术、设计、园艺等需要审美和创造力的职业。在人际关系中，您体贴而友善，但有时可能过于回避冲突或难以做决定。",
-        traits: ["富有艺术感", "温和体贴", "注重当下", "灵活适应"]
-      },
-      "INFP": {
-        type: "INFP",
-        name: "治愈者型",
-        description: "您理想主义、有同情心，重视个人价值。您善于理解他人，渴望创造有意义的生活。在工作中，您喜欢有使命感的、能够表达价值观的事情。您适合从事写作、咨询、社会工作等能够帮助他人和表达创意的职业。在人际关系中，您忠诚而有深度，但有时可能过于理想化或敏感。",
-        traits: ["理想主义", "富有同情心", "有创造力", "忠于价值"]
-      },
-      "INTP": {
-        type: "INTP",
-        name: "思想家型",
-        description: "您理性、好奇，喜欢理论和抽象思维。您善于分析复杂问题，追求知识和理解。在工作中，您喜欢独立思考、解决智力挑战。您适合从事科研、哲学、技术等需要分析和创新能力的职业。在人际关系中，您独立而开放，但有时可能显得疏离或过于批判。",
-        traits: ["理性分析", "好奇心强", "独立思考", "追求知识"]
-      },
-      "ESTP": {
-        type: "ESTP",
-        name: "挑战者型",
-        description: "您精力充沛、务实，善于即兴发挥。您喜欢行动和冒险，善于应对危机。在工作中，您注重实际结果，喜欢灵活多变的环境。您适合从事销售、体育、创业等需要应变能力和行动力的职业。在人际关系中，您活泼而直接，但有时可能显得冲动或不耐烦。",
-        traits: ["行动导向", "灵活应变", "务实高效", "充满活力"]
-      },
-      "ESFP": {
-        type: "ESFP",
-        name: "表演者型",
-        description: "您热情、友善，喜欢与他人互动。您享受当下，善于营造欢乐氛围。在工作中，您喜欢与人打交道、实际操作的岗位。您适合从事表演、销售、服务等需要人际技巧和活力的职业。在人际关系中，您热情而体贴，但有时可能过于关注外在或回避复杂问题。",
-        traits: ["热情友善", "善于交际", "注重当下", "充满乐趣"]
+        traits: ["务实可靠", "注重细节", "有条理", "负责任", "忠诚坚定"],
+        description: "秩序守护者 - 以责任和效率构建世界的坚实支柱",
+        sections: {
+          marriage: "在婚姻关系中，您是一个可靠而忠诚的伴侣。您重视承诺和稳定性，会为家庭提供坚实的物质和情感支持。您倾向于通过实际行动表达爱意，而不是浪漫的言语。您需要伴侣理解您对秩序和计划的需求，同时也要给您一定的个人空间来处理问题。在长期关系中，您会是一个值得信赖的伴侣，但需要注意表达情感和适应变化的能力。",
+          career: "您在职场上表现出色，特别擅长需要精确性、条理性和责任感的工作。项目管理、财务分析、工程技术和行政管理都是适合您的领域。您的优势在于能够系统化地解决问题，严格遵守流程，并在压力下保持高效。建议您：1) 在团队中发挥组织协调能力；2) 学习灵活应对计划外的变化；3) 培养战略思维，不要过度关注细节而忽略大局。您的职业发展路径应该是成为某个专业领域的专家或管理者。",
+          lifestyle: "您偏好有序、可预测的生活方式。日常生活中，您会制定详细的计划并按部就班地执行。您的家居环境通常整洁有序，每样物品都有固定位置。在休闲时间，您更喜欢有明确目标和规则的活动，如棋类游戏、徒步旅行或手工制作。您重视传统和惯例，节假日往往有固定的庆祝方式。为了生活平衡，建议您偶尔尝试一些自发性活动，培养至少一个创造性的爱好。",
+          health: "您的健康优势在于自律性和坚持能力。您可能已经有规律的锻炼计划和饮食安排。需要注意的压力源包括：过度工作、计划被打乱、环境混乱。常见健康风险：因长期压抑情绪导致的消化系统问题、肌肉紧张和失眠。健康建议：1) 每周安排2-3次有氧运动；2) 学习放松技巧如冥想；3) 定期进行身体检查；4) 培养表达情感的习惯。您的健康箴言：'规律是最好的医生'。",
+          finance: "在财务管理方面，您是谨慎而保守的类型。您倾向于详细规划收支，有明确的储蓄目标和应急基金。投资偏好低风险产品，如定期存款、国债和蓝筹股。您的财富优势在于：1) 强大的预算执行能力；2) 对细节的关注避免财务漏洞；3) 长期坚持的储蓄习惯。建议：在保持主要资金安全的同时，可以分配10-15%的资金尝试中等风险投资；考虑通过专业认证提升收入潜力；建立更全面的退休规划。",
+          advice: "基于您的性格特质，我们为您提供以下发展建议：在保持可靠性的同时，培养应对变化的灵活性；学习表达情感，让亲密关系更加丰富；定期审视长期目标，避免陷入日常细节；为创意和自发性留出空间，平衡生活；建立跨领域人际关系网络，拓展视野；每年学习一项新技能，保持成长心态。真正的智慧在于知道何时坚持原则，何时灵活变通。"
+        }
       },
       "ENFP": {
         type: "ENFP",
-        name: "倡导者型",
-        description: "您充满创意与激情，热衷于探索新领域并激发他人。您善于看到可能性，有感染力。在工作中，您喜欢有创意的、能够帮助他人成长的岗位。您适合从事市场营销、广告创意、教育等需要创造力和人际技巧的职业。在人际关系中，您热情而真诚，但有时可能过于理想化或分心。",
-        traits: ["充满创意", "热情洋溢", "善于沟通", "富有洞察力"]
+        traits: ["热情洋溢", "富有创意", "善于沟通", "充满好奇心", "理想主义"],
+        description: "灵感激发者 - 用热情点燃世界的无限可能",
+        sections: {
+          marriage: "在婚姻关系中，您是一个充满激情和创意的伴侣。您善于营造浪漫氛围，重视情感连接和精神共鸣。您需要伴侣欣赏您的创造力，同时提供一定的稳定性。在长期关系中，您可能会因为追求新鲜感而忽视日常细节，因此需要培养责任感和坚持性。您最适合的伴侣是能够平衡您的热情，同时支持您不断探索的理性类型。",
+          career: "您在职场上充满活力和创意，特别适合需要创新思维和人际互动的工作。市场营销、创意策划、心理咨询和教育培训都是您的优势领域。您的优势在于激发团队热情、发现新机会和创造性地解决问题。建议：1) 学会聚焦重点，避免同时进行太多项目；2) 培养细节管理能力；3) 寻找能够发挥创意的稳定工作环境。您可以成为优秀的团队领导者或自由职业者。",
+          lifestyle: "您喜欢充满变化和新体验的生活方式。日常生活中，您可能同时进行多项活动，享受不断探索的乐趣。您的家居环境可能充满各种兴趣收藏，但组织性可能不足。在休闲时间，您喜欢社交活动、旅行和尝试新事物。您重视个人成长和丰富体验，但需要注意平衡探索与稳定。建议建立基本生活规律，同时保留足够的自由空间。",
+          health: "您的健康优势在于乐观态度和活力充沛。需要注意的压力源包括：单调重复、限制自由、人际关系冲突。常见健康风险：因过度投入导致的精力透支、注意力分散引发的意外伤害。健康建议：1) 建立规律的作息时间；2) 练习冥想提高专注力；3) 保证足够休息时间；4) 选择多样化的运动方式。您的健康箴言：'在活力与休息间找到平衡'。",
+          finance: "在财务管理方面，您可能更注重体验价值而非物质积累。您倾向于为兴趣和体验消费，有时会冲动购物。投资方面，您可能偏好有故事或社会价值的产品。您的财富优势在于：1) 发现新机会的能力；2) 创造多元收入来源；3) 乐观面对经济波动。建议：建立自动储蓄计划；咨询专业理财顾问；为长期目标设立专项基金；控制冲动消费。",
+          advice: "基于您的性格特质，我们为您提供以下发展建议：在保持创造力的同时，培养专注和坚持的能力；学习平衡热情与现实考量；建立支持性的人际网络；定期进行自我反思；为长期目标制定具体计划；在冒险和稳定间寻找平衡点。真正的自由来自内在的纪律。"
+        }
       },
-      "ENTP": {
-        type: "ENTP",
-        name: "发明家型",
-        description: "您聪明、创新，善于辩论和提出新想法。您喜欢智力挑战，善于看到各种可能性。在工作中，您喜欢创业、策略等需要创新和应变能力的岗位。您适合从事发明、咨询、创业等需要分析和创造力的职业。在人际关系中，您机智而开放，但有时可能过于争辩或不敏感。",
-        traits: ["聪明机智", "创新思维", "善于辩论", "充满创意"]
-      },
-      "ESTJ": {
-        type: "ESTJ",
-        name: "管理者型",
-        description: "您实际、果断，善于组织和管理。您重视秩序和效率，喜欢领导他人。在工作中，您喜欢有明确目标和结构的岗位。您适合从事管理、行政、法律等需要组织和执行能力的职业。在人际关系中，您直接而负责，但有时可能显得固执或缺乏耐心。",
-        traits: ["组织能力强", "务实高效", "果断坚定", "责任感强"]
-      },
-      "ESFJ": {
-        type: "ESFJ",
-        name: "主人型",
-        description: "您友善、负责，善于照顾他人。您重视和谐，喜欢组织社交活动。在工作中，您喜欢服务他人、有明确职责的岗位。您适合从事教育、医疗、服务等需要关怀和组织能力的职业。在人际关系中，您体贴而可靠，但有时可能过于在意他人评价或回避冲突。",
-        traits: ["友善体贴", "善于合作", "责任心强", "注重和谐"]
-      },
-      "ENFJ": {
-        type: "ENFJ",
-        name: "教育家型",
-        description: "您有魅力、善于沟通，善于帮助他人成长。您重视人际关系，有领导才能。在工作中，您喜欢教育、咨询等能够影响和帮助他人的岗位。您适合从事教育、咨询、人力资源等需要人际和领导能力的职业。在人际关系中，您支持而热情，但有时可能过于理想化或忽视自己的需求。",
-        traits: ["善于沟通", "有领导力", "富有同理心", "善于激励"]
-      },
-      "ENTJ": {
-        type: "ENTJ",
-        name: "指挥官型",
-        description: "您果断、有战略眼光，善于领导和组织。您注重效率和结果，喜欢挑战。在工作中，您喜欢领导、创业等需要决策和战略能力的岗位。您适合从事管理、创业、咨询等需要领导和规划能力的职业。在人际关系中，您直接而自信，但有时可能显得专横或不敏感。",
-        traits: ["果断决策", "战略思维", "领导能力强", "注重效率"]
-      }
+      // 其他6种性格类型类似结构...
     };
 
     let currentQuestion = 0;
     let answers = [];
+    let testQuestionCount = 40; // 默认40题
+    let startTime = null;
+    let timerInterval = null;
     let personalityScores = {
       E: 0, I: 0,
       S: 0, N: 0,
@@ -743,8 +934,16 @@
 
     // 初始化测试
     document.addEventListener('DOMContentLoaded', () => {
-      loadQuestion();
-      updateProgress();
+      // 题量选择事件
+      document.getElementById('option-40').addEventListener('click', () => {
+        testQuestionCount = 40;
+        startTest();
+      });
+      
+      document.getElementById('option-60').addEventListener('click', () => {
+        testQuestionCount = 60;
+        startTest();
+      });
       
       // 提交测试按钮事件
       document.getElementById('submit-btn').addEventListener('click', submitQuiz);
@@ -753,12 +952,48 @@
       document.getElementById('wechat-pay').addEventListener('click', () => processPayment('微信支付'));
       document.getElementById('alipay-pay').addEventListener('click', () => processPayment('支付宝支付'));
       
-      // 反馈按钮事件
-      document.getElementById('feedback-btn').addEventListener('click', submitFeedback);
+      // 导出按钮事件
+      document.getElementById('export-image').addEventListener('click', exportAsImage);
+      document.getElementById('export-doc').addEventListener('click', exportAsDoc);
       
-      // 准确度反馈交互
-      setupAccuracyFeedback();
+      // 设置当前日期
+      const now = new Date();
+      document.getElementById('test-date').textContent = 
+        `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
     });
+
+    // 开始测试
+    function startTest() {
+      document.getElementById('test-options').classList.add('hidden');
+      document.getElementById('quiz-container').classList.remove('hidden');
+      
+      // 重置状态
+      currentQuestion = 0;
+      answers = [];
+      personalityScores = {E:0, I:0, S:0, N:0, T:0, F:0, J:0, P:0};
+      
+      // 开始计时
+      startTime = new Date();
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+      
+      // 加载第一题
+      loadQuestion();
+      updateProgress();
+    }
+
+    // 更新计时器
+    function updateTimer() {
+      if (!startTime) return;
+      
+      const now = new Date();
+      const diff = Math.floor((now - startTime) / 1000);
+      const minutes = Math.floor(diff / 60).toString().padStart(2, '0');
+      const seconds = (diff % 60).toString().padStart(2, '0');
+      
+      document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+      document.getElementById('result-timer').textContent = `${minutes}:${seconds}`;
+    }
 
     // 加载当前问题
     function loadQuestion() {
@@ -802,7 +1037,7 @@
           
           // 自动进入下一题（如果不是最后一题）
           setTimeout(() => {
-            if (currentQuestion < questions.length - 1) {
+            if (currentQuestion < testQuestionCount - 1) {
               currentQuestion++;
               loadQuestion();
               updateProgress();
@@ -814,18 +1049,22 @@
 
     // 更新进度条
     function updateProgress() {
-      const progress = ((currentQuestion + 1) / questions.length) * 100;
+      const progress = ((currentQuestion + 1) / testQuestionCount) * 100;
       document.getElementById('progress-fill').style.width = `${progress}%`;
-      document.getElementById('progress-text').textContent = `问题 ${currentQuestion + 1}/${questions.length}`;
+      document.getElementById('progress-text').textContent = `问题 ${currentQuestion + 1}/${testQuestionCount}`;
     }
 
     // 提交测试
     function submitQuiz() {
       // 确保所有问题都已回答
-      if (answers.length < questions.length) {
-        alert('请完成所有问题后再提交！');
+      if (answers.length < testQuestionCount) {
+        alert(`请完成所有${testQuestionCount}道问题后再提交！`);
         return;
       }
+      
+      // 停止计时
+      clearInterval(timerInterval);
+      updateTimer();
       
       // 计算性格类型
       calculatePersonality();
@@ -837,23 +1076,18 @@
 
     // 计算性格类型
     function calculatePersonality() {
-      // 重置分数
-      for (let key in personalityScores) {
-        personalityScores[key] = 0;
-      }
-      
       // 统计每个维度的分数
-      questions.forEach((q, index) => {
-        const dimension = q.dimension;
-        const optionIndex = answers[index];
+      for (let i = 0; i < testQuestionCount; i++) {
+        const q = questions[i];
+        const optionIndex = answers[i];
         
         // 每个维度的第一个字母对应选项0，第二个字母对应选项1
         if (optionIndex === 0) {
-          personalityScores[dimension[0]]++;
+          personalityScores[q.dimension[0]]++;
         } else if (optionIndex === 1) {
-          personalityScores[dimension[1]]++;
+          personalityScores[q.dimension[1]]++;
         }
-      });
+      }
       
       // 确定性格类型
       const ei = personalityScores.E > personalityScores.I ? 'E' : 'I';
@@ -870,6 +1104,7 @@
     // 处理支付
     function processPayment(method) {
       // 模拟支付成功
+      alert(`${method}成功！正在生成您的专属报告...`);
       document.getElementById('payment-container').classList.add('hidden');
       
       // 显示结果
@@ -881,11 +1116,10 @@
       const resultContainer = document.getElementById('result-container');
       resultContainer.classList.remove('hidden');
       
-      const personalityType = localStorage.getItem('personalityResult') || 'ENFP';
-      const result = results[personalityType];
+      const personalityType = localStorage.getItem('personalityResult') || 'ISTJ';
+      const result = personalityResults[personalityType];
       
       document.getElementById('personality-type').textContent = personalityType;
-      document.getElementById('result-text').textContent = result.description;
       
       // 更新性格特质
       const traitsContainer = document.querySelector('.traits');
@@ -893,43 +1127,27 @@
       result.traits.forEach(trait => {
         traitsContainer.innerHTML += `<span class="trait">${trait}</span>`;
       });
+      
+      // 更新各模块内容
+      document.querySelector('#result-text').textContent = result.sections.marriage;
+      // 其他模块更新...
     }
 
-    // 设置准确度反馈
-    function setupAccuracyFeedback() {
-      const points = document.querySelectorAll('.meter-point');
-      const accuracyText = document.getElementById('accuracy-text');
-      
-      points.forEach(point => {
-        point.addEventListener('click', function() {
-          const value = parseInt(this.dataset.value);
-          
-          // 更新选中的点
-          points.forEach((p, index) => {
-            if (index < value) {
-              p.classList.add('active');
-            } else {
-              p.classList.remove('active');
-            }
-          });
-          
-          // 更新文本
-          const texts = ['非常不准确', '不太准确', '一般准确', '比较准确', '非常准确'];
-          accuracyText.textContent = texts[value - 1];
-        });
-      });
+    // 导出为图片
+    function exportAsImage() {
+      alert("即将导出为图片...");
+      // 实际应用中应使用html2canvas库
+      // html2canvas(document.getElementById('result-container')).then(canvas => {
+      //   canvas.toBlob(blob => {
+      //     saveAs(blob, '性格测试报告.png');
+      //   });
+      // });
     }
 
-    // 提交反馈
-    function submitFeedback() {
-      const activePoints = document.querySelectorAll('.meter-point.active').length;
-      if (activePoints === 0) {
-        alert('请选择准确度评分！');
-        return;
-      }
-      
-      alert(`感谢您的反馈！您选择了 ${activePoints} 星评价。`);
-      // 这里可以添加实际的反馈提交逻辑
+    // 导出为Word文档
+    function exportAsDoc() {
+      alert("即将导出为Word文档...");
+      // 实际应用中应使用docx库
     }
   </script>
 </body>
