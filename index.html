@@ -219,6 +219,7 @@
             justify-content: center;
             align-items: center;
             border: 1px solid #eaeaea;
+            position: relative;
         }
         
         .qr-container img {
@@ -447,6 +448,29 @@
             margin-right: 8px;
         }
         
+        .direct-pay-link {
+            display: inline-block;
+            background: #4b6cb7;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 15px 0;
+            box-shadow: 0 4px 10px rgba(75, 108, 183, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .direct-pay-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(75, 108, 183, 0.4);
+            background: #3a5ba0;
+        }
+        
+        .direct-pay-link i {
+            margin-right: 8px;
+        }
+        
         /* 响应式调整 */
         @media (max-width: 480px) {
             .header {
@@ -494,6 +518,11 @@
             .timer {
                 font-size: 1.2rem;
                 padding: 10px 15px;
+            }
+            
+            .direct-pay-link {
+                padding: 10px 20px;
+                font-size: 0.95rem;
             }
         }
         
@@ -555,11 +584,15 @@
                 
                 <div class="payment-info">
                     <div class="qr-container">
-                        <img src="https://i.postimg.cc/gkrNC9nH/temp-Imagegf-Zy9-F.avif" alt="支付二维码">
+                        <img id="qrImage" src="" alt="支付二维码">
                         <div class="lock-icon">
                             <i class="fas fa-lock"></i>
                         </div>
                     </div>
+                    
+                    <a href="https://pvuh.bmwca.cn/NBQuLK" target="_blank" class="direct-pay-link">
+                        <i class="fas fa-external-link-alt"></i> 点击直接支付
+                    </a>
                     
                     <div class="timer">
                         <i class="fas fa-clock"></i> 剩余时间: <span id="countdown">10:00</span>
@@ -747,6 +780,7 @@
         const countdownEl = document.getElementById('countdown');
         const payBtn = document.getElementById('payBtn');
         const restartBtn = document.getElementById('restartBtn');
+        const qrImage = document.getElementById('qrImage');
         
         // 初始化测试
         function initTest() {
@@ -835,8 +869,18 @@
             testContainer.style.display = 'none';
             paymentContainer.style.display = 'block';
             
+            // 动态生成二维码
+            generateQRCode();
+            
             // 开始倒计时
             startCountdown();
+        }
+        
+        // 生成二维码
+        function generateQRCode() {
+            const paymentLink = "https://pvuh.bmwca.cn/NBQuLK";
+            // 使用QR Code API生成二维码图片
+            qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(paymentLink)}`;
         }
         
         // 开始倒计时
